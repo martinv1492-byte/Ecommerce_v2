@@ -1,7 +1,8 @@
 <?php
 
-require_once '../../config/config.php';   // Trae la variable $conexion
-require_once '../../models/producto.php';  // Trae la función crearProducto()
+require_once '../../views/includes/admin/proteger.php'; 
+require_once '../../config/config.php';   
+require_once '../../models/producto.php'; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
