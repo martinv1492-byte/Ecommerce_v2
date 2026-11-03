@@ -87,7 +87,14 @@ $categorias = obtenerCategorias($conexion);
                     <input type="text" class="form-control" id="marca" name="brand" placeholder="Escriba aqui...">
                 </div>
 
-                <button type="submit" class="btn btn-info w-100 text-dark fw-bold mb-3">Cargar</button>
+                <div class="d-flex flex-column flex-sm-row justify-content-end gap-2">
+                    <a href="productos.php" class="btn btn-outline-secondary px-4">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-dark px-4">
+                        Guardar cambios
+                    </button>
+                </div>
             </form>
             </div> 
         </div> 
