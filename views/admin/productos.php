@@ -98,7 +98,7 @@ elseif (isset($_GET['status']) && $_GET['status'] === 'error'):
                         <td><?php echo $producto["idProveedor"]; ?></td>
                         <td><?php echo $producto["stock"]; ?></td>
                         <td><?php echo $producto["marca"]; ?></td>
-                        <td><button onclick="window.location.href='producto_actualizar.php?'" class="btn btn-sm text-light" style="background-color: grey">Modificar</button></td>
+                        <td><a href="producto_actualizar.php?id=<?php echo $producto['idProducto']; ?>" class="btn btn-sm text-light" style="background-color: grey;">Modificar</a></td>
                         <td><a href="producto_eliminado.php?id=<?php echo $producto['idProducto']; ?>&nombre=<?php echo urlencode($producto['nombre']); ?>&marca=<?php echo urlencode($producto['marca']);?>" class="btn btn-sm text-light" style="background-color: grey;">Eliminar</a></td>
                     </tr>
                 <?php } ?>
