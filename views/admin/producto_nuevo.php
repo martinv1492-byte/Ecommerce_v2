@@ -1,3 +1,12 @@
+<?php
+
+require_once __DIR__ . '/../includes/admin/proteger.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/producto.php';
+
+$categorias = obtenerCategorias($conexion);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,17 +37,11 @@
                 <div>
                     <label for="categoria" class="form-label">Cargar categoria...</label>
                     <select id="categoria" class="form-select" name="category">
-                        <option value="" disabled selected>Seleccione categoria</option>
-                        <option value="1">Ron</option>
-                        <option value="2">Vodka</option>
-                        <option value="3">Vino</option>
-                        <option value="4">Whisky</option>
-                        <option value="5">Sidra</option>
-                        <option value="6">Ginebra</option>
-                        <option value="7">Tequila</option>
-                        <option value="8">Brandy</option>
-                        <option value="9">Espumante</option>
-                        <option value="10">Bebida sin alcohol</option>
+                        <?php foreach ($categorias as $cat): ?>
+                            <option value="<?php echo $cat['idCategoria']; ?>">
+                                <?php echo htmlspecialchars($cat['nombre']); ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             
@@ -49,17 +52,17 @@
             
                 <div class="col-md-4">
                     <label for="costo" class="form-label">Cargar costo</label>
-                    <input type="number" class="form-control" min=0 id="costo" name="cost" placeholder="Escriba aqui...">
+                    <input type="number" class="form-control" min=0 step="0.01" id="costo" name="cost" placeholder="Escriba aqui...">
                 </div>
 
                 <div class="col-md-4">
                     <label for="precio" class="form-label">Cargar precio</label>
-                    <input type="number" class="form-control" min=0 id="precio" name="price" placeholder="Escriba aqui...">
+                    <input type="number" class="form-control" min=0 step="0.01" id="precio" name="price" placeholder="Escriba aqui...">
                 </div>
                 
                 <div class="col-12">
                     <label for="foto" class="form-label">Cargar foto</label>
-                    <textarea class="form-control" id="foto" name="photo" placeholder="Escriba url de la imagen aqui..."></textarea>
+                    <input type="url" class="form-control" id="foto" name="photo" placeholder="https://ejemplo.com">
                 </div>
                 
                 <div class="col-md-6">

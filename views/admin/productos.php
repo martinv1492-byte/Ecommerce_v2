@@ -1,12 +1,21 @@
 <?php 
 require_once __DIR__ . '/../includes/admin/proteger.php';
+require_once __DIR__ . '/../../config/config.php';
+include(__DIR__ . '/../../models/producto.php');
+
+$categoriaSeleccionada = isset($_GET['categoria']) ? $_GET['categoria'] : 'todas';
+$listado = obtenerProductos($conexion, $categoriaSeleccionada);
+$categorias = obtenerCategorias($conexion);
+
 
 if (isset($_GET['status']) && $_GET['status'] === 'success'): 
 ?>
+
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>¡Excelente!</strong> El producto se ha guardado correctamente en la base de datos.
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+
 <?php 
 elseif (isset($_GET['status']) && $_GET['status'] === 'error'): 
 ?>
@@ -16,12 +25,7 @@ elseif (isset($_GET['status']) && $_GET['status'] === 'error'):
     </div>
 <?php endif; ?>
 
-<?php 
-include(__DIR__ . '/../../models/producto.php');
-$categoriaSeleccionada = isset($_GET['categoria']) ? $_GET['categoria'] : 'todas';
-$listado = obtenerProductos($conexion, $categoriaSeleccionada);
-$categorias = obtenerCategorias($conexion);
-?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +33,7 @@ $categorias = obtenerCategorias($conexion);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/ecommerce/assets/css/bootstrap.min.css">
-    <title>Document</title>
+    <title>Panel de Productos - Vinoteca</title>
 </head>
 <body>
     <div class="container mt-4">
