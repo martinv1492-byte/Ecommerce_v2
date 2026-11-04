@@ -39,8 +39,10 @@ elseif (isset($_GET['status']) && $_GET['status'] === 'error'):
     <div>
         <div class="table-responsive">
             <h1>Vinoteca</h1>
-            <div class="text-end mb-3">      
+            <div class="text-end mb-3">  
+                <button onclick="window.location.href='proveedor_nuevo.php'" class="btn btn-sm text-light" style="background-color: blue">Cargar nuevo proveedor</button>    
                 <button onclick="window.location.href='producto_nuevo.php?'" class="btn btn-sm text-light" style="background-color: green">Cargar producto nuevo</button>
+                <button onclick="window.location.href='categoria_nueva.php'" class="btn btn-sm text-light" style="background-color: orange">Cargar nueva categoria</button>
             </div>
 
             <form method="GET" action="" class="row g-3 align-items-center mb-4 bg-light p-3 rounded border">
@@ -85,23 +87,26 @@ elseif (isset($_GET['status']) && $_GET['status'] === 'error'):
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($listado as $producto) { ?>
+                    <?php foreach ($listado as $producto) { ?>
                     <tr>
                         <td><?php echo $producto["idProducto"]; ?></td>
-                        <td><?php echo $producto["nombre"]; ?></td>
-                        <td><?php echo $producto["codigo"]; ?></td>
-                        <td><?php echo $producto["idCategoria"]; ?></td>
-                        <td><?php echo $producto["descripcion"]; ?></td>
-                        <td><?php echo $producto["costo"]; ?></td>
-                        <td><?php echo $producto["precio"]; ?></td>
-                        <td><img src="<?php echo $producto["foto"]; ?>" style="width: 100px ; height: 100px"></td>
-                        <td><?php echo $producto["idProveedor"]; ?></td>
+                        <td><?php echo htmlspecialchars($producto["nombre"]); ?></td>
+                        <td><?php echo htmlspecialchars($producto["codigo"]); ?></td>
+                        <!-- Aquí va la categoría -->
+                        <td><?php echo htmlspecialchars($producto["nombre_categoria"] ?? 'Sin categoría'); ?></td>
+                        <!-- Aquí va la descripción (separada de la categoría) -->
+                        <td><?php echo htmlspecialchars($producto["descripcion"]); ?></td>
+                        <td>$<?php echo number_format($producto["costo"], 2); ?></td>
+                        <td>$<?php echo number_format($producto["precio"], 2); ?></td>
+                        <td><img src="<?php echo htmlspecialchars($producto["foto"]); ?>" style="width: 50px; height: 50px; object-fit: cover;"></td>
+                        <!-- Aquí va el proveedor -->
+                        <td><?php echo htmlspecialchars($producto["nombre_proveedor"] ?? 'Sin proveedor'); ?></td>
                         <td><?php echo $producto["stock"]; ?></td>
-                        <td><?php echo $producto["marca"]; ?></td>
+                        <td><?php echo htmlspecialchars($producto["marca"]); ?></td>
                         <td><a href="producto_actualizar.php?id=<?php echo $producto['idProducto']; ?>" class="btn btn-sm text-light" style="background-color: grey;">Modificar</a></td>
                         <td><a href="producto_eliminado.php?id=<?php echo $producto['idProducto']; ?>&nombre=<?php echo urlencode($producto['nombre']); ?>&marca=<?php echo urlencode($producto['marca']);?>" class="btn btn-sm text-light" style="background-color: grey;">Eliminar</a></td>
                     </tr>
-                <?php } ?>
+                    <?php } ?>
                 </tbody>
             </table>         
         </div>
