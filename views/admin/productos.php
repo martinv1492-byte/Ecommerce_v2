@@ -36,7 +36,7 @@ elseif (isset($_GET['status']) && $_GET['status'] === 'error'):
     <title>Panel de Productos - Vinoteca</title>
 </head>
 <body>
-    <div class="container mt-4">
+    <div>
         <div class="table-responsive">
             <h1>Vinoteca</h1>
             <div class="text-end mb-3">      
