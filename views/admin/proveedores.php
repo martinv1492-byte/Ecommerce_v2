@@ -67,12 +67,22 @@ $proveedores = obtenerProveedores($conexion);
                                         <td><?php echo htmlspecialchars($prov['nombre']); ?></td>
                                         <td><?php echo htmlspecialchars($prov['cuit']); ?></td>
                                         <td><?php echo htmlspecialchars($prov['razonSocial']); ?></td>
+                                        
                                         <td class="text-center">
+                                            <div class="d-flex gap-1 justify-content-center">
                                             <a href="../../controllers/admin/proveedor_eliminar.php?id=<?php echo $prov['idProveedor']; ?>" 
                                             class="btn btn-sm btn-danger"
                                             onclick="return confirm('¿Estás seguro de eliminar este proveedor?');">
                                             Eliminar
                                             </a>
+                                        
+                                        
+                                            <a href="proveedor_modificar.php?id=<?php echo $prov['idProveedor']; ?>"
+                                            class="btn btn-sm btn-outline-secondary"
+                                            onclick="return confirm('¿Estás seguro de modificar este proveedor?');">
+                                            Modificar
+                                            </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

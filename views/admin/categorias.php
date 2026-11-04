@@ -45,11 +45,18 @@ $categorias = obtenerCategorias($conexion);
                                         <td><?php echo $cat["idCategoria"]; ?></td>
                                         <td><?php echo htmlspecialchars($cat["nombre"]); ?></td>
                                         <td class="text-center">
+                                            <div class="d-flex gap-1 justify-content-center">
                                             <a href="../../controllers/admin/categoria_eliminar.php?id=<?php echo $cat['idCategoria']; ?>" 
                                             class="btn btn-sm btn-danger" 
                                             onclick="return confirm('¿Estás seguro de eliminar esta categoría?');">
                                             Eliminar
                                             </a>
+                                            <a href="categoria_modificar.php?id=<?php echo $cat['idCategoria']; ?>"
+                                            class="btn btn-sm btn-outline-secondary"
+                                            onclick="return confirm('¿Estás seguro de modificar esta categoria?');">
+                                            Modificar
+                                            </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

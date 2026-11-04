@@ -21,4 +21,23 @@ function eliminarProveedor(PDO $conexion, array $datosProveedor) {
     return $stmt->execute($datosProveedor);
 }
 
+function modificarProveedor(PDO $conexion, int $idProveedor, array $datosProveedor) {
+    $sql = "UPDATE proveedores SET
+                idProveedor = :idProveedor,
+                nombre = :nombre,
+                cuit = :cuit,
+                razonSocial = :razonSocial,
+            WHERE idProveedor = :id";
+    $stmt = $conexion->prepare($sql);
+    $datosProveedor[':id'] = $idProveedor;
+    return $stmt->execute($datosProveedor);
+}
+
+function obtenerProveedorPorId($conexion, $idProveedor) {
+    $sql = "SELECT * FROM proveedores WHERE idProveedor = :id";
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute([':id' => $idProveedor]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 ?>
