@@ -29,6 +29,7 @@ function obtenerProductos(PDO $conexion, $idCategoria = 'todas') {
     
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 function crearProducto(PDO $conexion, array $datosProducto){
     $sql = "INSERT INTO `productos`(`nombre`, `codigo`, `idCategoria`, `descripcion`, `costo`, `precio`, `foto`, `idProveedor`, `stock`, `marca`) 
     VALUES (:name, :code, :category, :description, :cost, :price, :photo, :supplier, :stock, :brand)";
@@ -51,7 +52,6 @@ function editarProducto(PDO $conexion, int $idProducto, array $datosProducto) {
             WHERE idProducto = :id";
 
     $stmt = $conexion->prepare($sql);
-
     $datosProducto[':id'] = $idProducto;
 
     return $stmt->execute($datosProducto);
@@ -59,30 +59,27 @@ function editarProducto(PDO $conexion, int $idProducto, array $datosProducto) {
 
 function obtenerProductoPorId(PDO $conexion, int $idProducto) {
     $sql = "SELECT * FROM productos WHERE idProducto = :id";
-
     $stmt = $conexion->prepare($sql);
-
     $stmt->bindValue(':id', $idProducto, PDO::PARAM_INT);
-
     $stmt->execute();
 
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
 function eliminarProducto(PDO $conexion, int $idProducto){
     $sql = "DELETE FROM productos WHERE idProducto = :id";
     $stmt = $conexion->prepare($sql);
     return $stmt->execute([ ':id' => $idProducto ]);
 }
-// FUNCIÓN NUEVA Y EXCLUSIVA PARA LAS URLS AMIGABLES DEL CATÁLOGO
+
+// FUNCIÓN HÍBRIDA EXCLUSIVA PARA LA TIENDA Y LAS URLS AMIGABLES
 function obtenerProductosPorNombreCategoria(PDO $conexion, $categoriaSeleccionada = 'todas') {
     if ($categoriaSeleccionada !== 'todas' && !empty($categoriaSeleccionada)) {
         
-        // REVISIÓN INTELIGENTE: ¿Nos mandaron un ID numérico o el texto del nombre?
+        // Evaluamos si es un ID numérico (para el detalle o enlaces manuales) o texto (para el aside)
         if (is_numeric($categoriaSeleccionada)) {
-            // Si es un número (como el 10), filtramos de forma ultra segura por ID
-            $condicion = "p.idCategoria = :categoriaSeleccionada";
+            $condicion = "p.idProducto = :categoriaSeleccionada";
         } else {
-            // Si es texto (como 'tintos'), filtramos por el nombre en minúsculas
             $condicion = "LOWER(TRIM(c.nombre)) = :categoriaSeleccionada";
         }
 
