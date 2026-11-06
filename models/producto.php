@@ -11,11 +11,18 @@ function obtenerCategorias(PDO $conexion) {
 
 function obtenerProductos(PDO $conexion, $idCategoria = 'todas') {
     if ($idCategoria !== 'todas' && !empty($idCategoria)) {
-        $sql = "SELECT * FROM productos WHERE idCategoria = :idCategoria";
+        $sql = "SELECT p.*, pr.nombre AS nombre_proveedor, c.nombre AS nombre_categoria 
+                FROM productos p 
+                LEFT JOIN proveedores pr ON p.idProveedor = pr.idProveedor 
+                LEFT JOIN categorias c ON p.idCategoria = c.idCategoria 
+                WHERE p.idCategoria = :idCategoria";
         $stmt = $conexion->prepare($sql);
         $stmt->execute([':idCategoria' => $idCategoria]);
     } else {
-        $sql = "SELECT * FROM productos";
+        $sql = "SELECT p.*, pr.nombre AS nombre_proveedor, c.nombre AS nombre_categoria 
+                FROM productos p 
+                LEFT JOIN proveedores pr ON p.idProveedor = pr.idProveedor
+                LEFT JOIN categorias c ON p.idCategoria = c.idCategoria";
         $stmt = $conexion->prepare($sql);
         $stmt->execute();
     }
@@ -65,5 +72,37 @@ function eliminarProducto(PDO $conexion, int $idProducto){
     $sql = "DELETE FROM productos WHERE idProducto = :id";
     $stmt = $conexion->prepare($sql);
     return $stmt->execute([ ':id' => $idProducto ]);
+}
+// FUNCIÓN NUEVA Y EXCLUSIVA PARA LAS URLS AMIGABLES DEL CATÁLOGO
+function obtenerProductosPorNombreCategoria(PDO $conexion, $categoriaSeleccionada = 'todas') {
+    if ($categoriaSeleccionada !== 'todas' && !empty($categoriaSeleccionada)) {
+        
+        // REVISIÓN INTELIGENTE: ¿Nos mandaron un ID numérico o el texto del nombre?
+        if (is_numeric($categoriaSeleccionada)) {
+            // Si es un número (como el 10), filtramos de forma ultra segura por ID
+            $condicion = "p.idCategoria = :categoriaSeleccionada";
+        } else {
+            // Si es texto (como 'tintos'), filtramos por el nombre en minúsculas
+            $condicion = "LOWER(TRIM(c.nombre)) = :categoriaSeleccionada";
+        }
+
+        $sql = "SELECT p.*, pr.nombre AS nombre_proveedor, c.nombre AS nombre_categoria 
+                FROM productos p 
+                LEFT JOIN proveedores pr ON p.idProveedor = pr.idProveedor 
+                LEFT JOIN categorias c ON p.idCategoria = c.idCategoria 
+                WHERE $condicion";
+                
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([':categoriaSeleccionada' => $categoriaSeleccionada]);
+    } else {
+        $sql = "SELECT p.*, pr.nombre AS nombre_proveedor, c.nombre AS nombre_categoria 
+                FROM productos p 
+                LEFT JOIN proveedores pr ON p.idProveedor = pr.idProveedor
+                LEFT JOIN categorias c ON p.idCategoria = c.idCategoria";
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute();
+    }
+    
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
