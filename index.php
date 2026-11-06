@@ -7,17 +7,23 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/config/config.php'; // (Ajustá el nombre de tu archivo de conexión real)
 require_once __DIR__ . '/models/producto.php'; // (Ajustá al nombre de tu modelo real)
 
-$categoriaSeleccionada = isset($_GET['categoria']) ? $_GET['categoria'] : 'todas';
+$categoriaSeleccionada = isset($_GET['categoria']) ? strtolower(trim($_GET['categoria'])) : 'todas';
+
+$categoriaUrl = isset($_GET['categoria']) ? strtolower(trim($_GET['categoria'])) : 'todas';
+
+// 2. TRADUCTOR MÁGICO: Si la URL dice 'sin-alcohol', internamente lo cambiamos por el ID 10
+// Podés sumar más traducciones acá abajo si te pasa con otra categoría en el futuro
+if ($categoriaUrl === 'bebida-sin-alcohol' || $categoriaUrl === 'bebida sin alcohol') {
+    $categoriaSeleccionada = 10;
+} else {
+    // Si es cualquier otra (como 'tintos'), dejamos el texto tal cual para que el aside siga igual
+    $categoriaSeleccionada = $categoriaUrl;
+}
 // 3. Traemos los productos usando la variable de conexión de tu proyecto
 // Recordá cambiar '$conexion' por el nombre exacto de tu variable de PDO si se llama distinto (ej: $db o $pdo)
-$productos = obtenerProductos($conexion, $categoriaSeleccionada); 
+$categorias = obtenerCategorias($conexion); 
 
-$categorias = [
-    ['idCategoria' => 1, 'nombre' => 'Tintos'],
-    ['idCategoria' => 2, 'nombre' => 'Blancos & Rosados'],
-    ['idCategoria' => 3, 'nombre' => 'Espumantes'],
-    ['idCategoria' => 4, 'nombre' => 'Destilados']
-];
+$productos = obtenerProductosPorNombreCategoria($conexion, $categoriaSeleccionada); 
 
 // 1. Cargamos el head (abre el HTML, el <head> y el <body>)
 include_once __DIR__ . '/views/includes/tienda/head.php';
@@ -33,18 +39,18 @@ include_once __DIR__ . '/views/includes/tienda/header.php';
                 <h5 class="fw-bold mb-3 text-uppercase pb-2 border-bottom" style="font-family: 'Times New Roman', serif; letter-spacing: 1px;">
                     Categorías
                 </h5>
+                
                 <div class="list-group list-group-flush">
-                    <a href="index.php" class="list-group-item list-group-item-action <?= $categoriaSeleccionada === 'todas' ? 'active bg-dark border-dark' : ''; ?> fw-semibold">
-                        Ver todas las categorías
-                    </a>
-
-                    <?php foreach ($categorias as $cat): ?>
-                        <a href="index.php?categoria=<?= $cat['idCategoria']; ?>" 
-                           class="list-group-item list-group-item-action <?= $categoriaSeleccionada == $cat['idCategoria'] ? 'active bg-dark border-dark' : ''; ?>">
+                    <?php foreach ($categorias as $cat):
+                        $slugCategoria = strtolower($cat['nombre']);  ?>
+                        <a href="index.php?categoria=<?= $slugCategoria; ?>" 
+                           class="list-group-item list-group-item-action <?= $categoriaSeleccionada == $slugCategoria ? 'active bg-dark border-dark' : ''; ?>">
                             <?= $cat['nombre']; ?>
                         </a>
                     <?php endforeach; ?>
-
+                    <a href="index.php" class="list-group-item list-group-item-action <?= $categoriaSeleccionada === 'todas' ? 'active bg-dark border-dark' : ''; ?> fw-semibold">
+                        Ver todas las categorías
+                    </a>
                 </div>
             </div>
         </aside>
@@ -63,7 +69,7 @@ include_once __DIR__ . '/views/includes/tienda/header.php';
                 <?php if (!empty($productos)): ?>
                     <?php foreach ($productos as $producto): ?>
                         <div class="col">
-                            <?php include __DIR__ . '/views/componentes/tarjeta_producto.php'; ?>
+                            <?php include __DIR__ . '/views/includes/tienda/tarjeta_producto.php'; ?>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>

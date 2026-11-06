@@ -10,8 +10,8 @@
 
         <!-- 3. Menú de Usuario y Carrito Minimalista (A la derecha) -->
         <div class="d-flex align-items-center gap-4" style="width: 150px; justify-content: flex-end;">
-            <a href="views/registro.php" class="text-muted text-decoration-none small d-none d-sm-inline">Iniciar Sesión</a>
-            
+            <a href="views/tienda/registro.php" class="text-muted text-decoration-none small d-none d-sm-inline">Registrarse aquí</a>
+            <a href="" class="text-muted text-decoration-none small d-none d-sm-inline">Iniciar Sesión</a>
             <!-- Carrito minimalista sin fondo de botón -->
             <a href="views/tienda/carrito.php" class="text-dark position-relative text-decoration-none">
                 <!-- Código nativo de la canasta (No necesita internet ni archivos de iconos) -->
@@ -39,10 +39,10 @@
             <!-- Links en mayúscula hacia la izquierda -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase fw-semibold" style="font-size: 0.85rem; letter-spacing: 0.5px;">
                 <li class="nav-item"><a class="nav-link text-white me-2" href="#">Novedades</a></li>
-                <li class="nav-item"><a class="nav-link text-white-50 me-2" href="#">Vinos</a></li>
-                <li class="nav-item"><a class="nav-link text-white-50 me-2" href="#">Espumantes</a></li>
-                <li class="nav-item"><a class="nav-link text-white-50 me-2" href="#">Sin alcohol</a></li>
-                <li class="nav-item"><a class="nav-link text-danger fw-bold" href="#">Ofertas</a></li>
+                <li class="nav-item"><a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=vino">Vinos</a></li>
+                <li class="nav-item"><a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=espumante">Espumantes</a></li>
+                <li class="nav-item"><a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=bebida-sin-alcohol">Sin alcohol</a></li>
+                <li class="nav-item"><a class="nav-link text-danger fw-bold" href="">Ofertas</a></li>
             </ul>
 
             <!-- Buscador a la derecha integrado en la barra negra -->
