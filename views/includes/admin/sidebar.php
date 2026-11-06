@@ -3,7 +3,7 @@
 $paginaActual = basename($_SERVER['PHP_SELF']);
 ?>
 
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 220px; min-height: 100vh;">
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 180px; min-height: 100vh;">
     <!-- Título / Marca del Panel -->
     <a href="productos.php" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
         <span class="fs-4">Panel Vinoteca</span>
