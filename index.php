@@ -1,49 +1,82 @@
-<?php 
-if (isset($_GET['error'])){
-    $error = urldecode($_GET['error']) ;
-    echo "<script> alert ('$error');</script>";
-};
-?>
-
 <?php
+// 1. Forzamos a que muestre errores por si algo de la base de datos falla
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
-
-require_once  '../views/includes/tienda/head.php';
-require_once  '../views/includes/admin/proteger.php';
-require_once  '../config/config.php';
-require_once  '../models/producto.php';
+// 2. Traemos la conexión y el modelo directamente aquí
+require_once __DIR__ . '/config/config.php'; // (Ajustá el nombre de tu archivo de conexión real)
+require_once __DIR__ . '/models/producto.php'; // (Ajustá al nombre de tu modelo real)
 
 $categoriaSeleccionada = isset($_GET['categoria']) ? $_GET['categoria'] : 'todas';
-$listado = obtenerProductos($conexion, $categoriaSeleccionada);
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/ecommerce/assets/css/bootstrap.min.css">
-</head>
-</html>
-<?php foreach ($listado as $prod): ?>
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="card h-100 text-light border-secondary shadow-sm" style="background-color: darkslategray;">
+// 3. Traemos los productos usando la variable de conexión de tu proyecto
+// Recordá cambiar '$conexion' por el nombre exacto de tu variable de PDO si se llama distinto (ej: $db o $pdo)
+$productos = obtenerProductos($conexion, $categoriaSeleccionada); 
 
-                    <img src="<?= !empty($prod['foto']) ? $prod['foto'] : 'https://asdlib.org/wp-content/uploads/2021/11/no-image.jpg' ?>" 
-                    class="card-img-top bg-white object-fit-contain" style="height: 200px; width: 100%;" alt="<?= htmlspecialchars($prod['nombre']) ?>">
-                    
-                    <div class="card-body d-flex flex-column justify-content-between p-3">
-                        <div>
-                            <h5 class="card-title fw-bold text-info mb-1"><?= htmlspecialchars($prod['nombre']) ?></h5>
-                            <p class="card-text text-white-50 small mb-3"><?= htmlspecialchars(substr($prod['descripcion'], 0, 80)) ?>...</p>
-                        </div>
-                        
-                        <div>
-                            <h4 class="text-white fw-bold mb-3">$<?= number_format($prod['precio'], 2, ',', '.') ?></h4>
-                            
-                            <a href="index.php?controller=producto&action=detalle&id=<?= $prod['id'] ?>" class="btn btn-info w-100 text-dark fw-bold">Ver Detalle</a>
-                        </div>
-                    </div>
-                    
+$categorias = [
+    ['idCategoria' => 1, 'nombre' => 'Tintos'],
+    ['idCategoria' => 2, 'nombre' => 'Blancos & Rosados'],
+    ['idCategoria' => 3, 'nombre' => 'Espumantes'],
+    ['idCategoria' => 4, 'nombre' => 'Destilados']
+];
+
+// 1. Cargamos el head (abre el HTML, el <head> y el <body>)
+include_once __DIR__ . '/views/includes/tienda/head.php';
+
+// 2. Cargamos la barra de navegación que acabamos de hacer
+include_once __DIR__ . '/views/includes/tienda/header.php';
+?>
+
+<main class="container my-5">
+    <div class="row">
+        <aside class="col-md-3 mb-4">
+            <div class="p-3 border bg-white shadow-sm">
+                <h5 class="fw-bold mb-3 text-uppercase pb-2 border-bottom" style="font-family: 'Times New Roman', serif; letter-spacing: 1px;">
+                    Categorías
+                </h5>
+                <div class="list-group list-group-flush">
+                    <a href="index.php" class="list-group-item list-group-item-action <?= $categoriaSeleccionada === 'todas' ? 'active bg-dark border-dark' : ''; ?> fw-semibold">
+                        Ver todas las categorías
+                    </a>
+
+                    <?php foreach ($categorias as $cat): ?>
+                        <a href="index.php?categoria=<?= $cat['idCategoria']; ?>" 
+                           class="list-group-item list-group-item-action <?= $categoriaSeleccionada == $cat['idCategoria'] ? 'active bg-dark border-dark' : ''; ?>">
+                            <?= $cat['nombre']; ?>
+                        </a>
+                    <?php endforeach; ?>
+
                 </div>
             </div>
-        <?php endforeach; ?>
+        </aside>
+    
+        <section class="col-md-9">
+            <h2 class="mb-4 fw-bold" style="font-family: 'Times New Roman', serif; letter-spacing: 1px;">
+                <?php 
+                    // Título dinámico según lo seleccionado
+                    echo $categoriaSeleccionada === 'todas' ? 'Nuestra Selección' : 'Productos Filtrados'; 
+                ?>
+            </h2>
+            
+            <!-- Reducimos a un máximo de 3 tarjetas por fila para que entren bien al lado del aside -->
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                
+                <?php if (!empty($productos)): ?>
+                    <?php foreach ($productos as $producto): ?>
+                        <div class="col">
+                            <?php include __DIR__ . '/views/componentes/tarjeta_producto.php'; ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="col-12 text-center py-5">
+                        <p class="text-muted fs-5">No hay vinos disponibles en esta categoría en este momento.</p>
+                    </div>
+                <?php endif; ?>
+
+            </div>
+        </section>
+    </div>
+</main>
+
+<?php 
+include_once __DIR__ . '/views/includes/tienda/footer.php'; ?>
+?>
