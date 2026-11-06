@@ -10,10 +10,10 @@
 
         <!-- 3. Menú de Usuario y Carrito Minimalista (A la derecha) -->
         <div class="d-flex align-items-center gap-4" style="width: 150px; justify-content: flex-end;">
-            <a href="#" class="text-muted text-decoration-none small d-none d-sm-inline">Iniciar Sesión</a>
+            <a href="views/registro.php" class="text-muted text-decoration-none small d-none d-sm-inline">Iniciar Sesión</a>
             
             <!-- Carrito minimalista sin fondo de botón -->
-            <a href="#" class="text-dark position-relative text-decoration-none">
+            <a href="views/tienda/carrito.php" class="text-dark position-relative text-decoration-none">
                 <!-- Código nativo de la canasta (No necesita internet ni archivos de iconos) -->
             <svg xmlns="http://w3.org" width="22" height="22" fill="currentColor" class="bi bi-basket3 me-1" viewBox="0 0 16 16" style="vertical-align: middle;">
                 <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-.538-6h10.288l-.538 6H3.394zm1.12-5l.429 4h7.114l.429-4H4.514z"/>
