@@ -13,21 +13,21 @@ $proveedores = obtenerProveedores($conexion);
     <link rel="stylesheet" href="/ecommerce/assets/css/bootstrap.min.css">
     <title>Gestión de Proveedores - Vinoteca</title>
 </head>
-<!-- Bloque de Alertas Dinámicas -->
+
 <?php if (isset($_GET['status'])): ?>
     <?php if ($_GET['status'] === 'success'): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            Proveedor eliminado correctamente.
+            Operacion exitosa.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php elseif ($_GET['status'] === 'error_relacion'): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Error de integridad:</strong> No se puede eliminar este proveedor porque tiene productos asociados en el sistema.
+            <strong>Error de integridad:</strong> No se puede procesar la operacion porque este proveedor porque tiene productos asociados en el sistema.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php elseif ($_GET['status'] === 'error'): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            Ocurrió un error inesperado al intentar eliminar el proveedor.
+            Ocurrió un error al procesar la operación en el proveedor.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
@@ -35,19 +35,18 @@ $proveedores = obtenerProveedores($conexion);
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- Columna del Sidebar -->
+            
             <div class="col-md-3 col-lg-2 px-0 bg-dark">
                 <?php include __DIR__ . '/../includes/admin/sidebar.php'; ?>
             </div>
 
-            <!-- Columna del Contenido Principal -->
+            
             <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4 py-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h1>Gestión de Proveedores</h1>
-                    <a href="proveedor_nuevo.php" class="btn btn-success">Nuevo Proveedor</a>
                 </div>
 
-                <!-- Tabla para listar los proveedores -->
+                
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered align-middle">
                         <thead class="table-light">

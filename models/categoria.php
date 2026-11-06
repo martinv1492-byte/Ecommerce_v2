@@ -23,16 +23,14 @@ function eliminarCategoria(PDO $conexion, array $datosCategoria) {
     $stmt = $conexion->prepare($sql);
     return $stmt->execute($datosCategoria);
 }
-
 function modificarCategoria(PDO $conexion, int $idCategoria, array $datosCategoria) {
-    $sql = "UPDATE categorias SET
-                idCategoria = :idCategoria,
-                nombre = :nombre,
-                cuit = :cuit,
-                razonSocial = :razonSocial,
-            WHERE idCategoria = :id";
+
+    $sql = "UPDATE categorias SET 
+                nombre = :nombre 
+            WHERE idCategoria = :id";            
     $stmt = $conexion->prepare($sql);
-    $datosCategoria[':id'] = $idCategoria;
+    $datosCategoria[':id'] = $idCategoria; 
+    
     return $stmt->execute($datosCategoria);
 }
 

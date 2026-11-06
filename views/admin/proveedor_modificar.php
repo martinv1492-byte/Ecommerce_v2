@@ -1,10 +1,8 @@
 <?php 
 require_once __DIR__ . '/../includes/admin/proteger.php';
 require_once __DIR__ . '/../../config/config.php';
-// Asegúrate de incluir tu modelo de proveedor para poder buscar el proveedor por ID
 require_once __DIR__ . '/../../models/proveedor.php';
 
-// Verificamos que llegue un ID válido por GET
 $idProveedor = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 if ($idProveedor <= 0) {
@@ -39,7 +37,7 @@ if (!$proveedor) {
                 <h1 class="mb-4">Modificar Proveedor</h1>
 
                 <form action="../../controllers/admin/proveedor_modificar.php" method="POST" class="bg-light p-4 rounded border shadow-sm">
-                    <!-- Campo oculto para enviar el ID indispensable para saber a quién modificar -->
+
                     <input type="hidden" name="idProveedor" value="<?php echo $proveedor['idProveedor']; ?>">
 
                     <div class="mb-3">
@@ -56,7 +54,7 @@ if (!$proveedor) {
                         <label for="razonSocial" class="form-label fw-bold">Razon Social del Proveedor:</label>
                         <input type="text" class="form-control" id="razonSocial" name="razonSocial" value="<?php echo htmlspecialchars($proveedor['razonSocial']); ?>" required>
                     </div>
-                    <!-- Agrega aquí abajo los demás campos si tu proveedor tiene teléfono, email, dirección, etc. -->
+                    
 
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Guardar Cambios</button>

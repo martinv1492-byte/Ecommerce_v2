@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
 
 
-            if (modificarCategoria($conexion, $datosCategoria, $idCategoria)) {
+            if (modificarCategoria($conexion, $idCategoria, $datosCategoria,)) {
                 header("Location: /ecommerce/views/admin/categorias.php?status=success");
                 exit();
             } else {

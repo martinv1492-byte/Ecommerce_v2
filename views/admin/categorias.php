@@ -1,7 +1,7 @@
 <?php 
 require_once __DIR__ . '/../includes/admin/proteger.php';
 require_once __DIR__ . '/../../config/config.php';
-require_once __DIR__ . '/../../models/categoria.php'; // Incluimos el modelo aquí
+require_once __DIR__ . '/../../models/categoria.php'; 
 
 $categorias = obtenerCategorias($conexion);
 ?>
@@ -17,18 +17,32 @@ $categorias = obtenerCategorias($conexion);
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- Columna del Sidebar -->
+
             <div class="col-md-3 col-lg-2 px-0 bg-dark">
                 <?php include __DIR__ . '/../includes/admin/sidebar.php'; ?>
             </div>
-
+            
             <!-- Columna del Contenido Principal -->
             <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4 py-4">
+
+                <?php if (isset($_GET['status'])): ?>
+                    <?php if ($_GET['status'] === 'success'): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ¡Operación realizada con éxito!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php elseif ($_GET['status'] === 'error'): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            Ocurrió un error inesperado al procesar la categoría.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h1>Gestión de Categorías</h1>
-                    <a href="categoria_nueva.php" class="btn btn-success">Nueva Categoría</a>
                 </div>
-
+                
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered align-middle">
                         <thead class="table-light">
@@ -52,8 +66,7 @@ $categorias = obtenerCategorias($conexion);
                                             Eliminar
                                             </a>
                                             <a href="categoria_modificar.php?id=<?php echo $cat['idCategoria']; ?>"
-                                            class="btn btn-sm btn-outline-secondary"
-                                            onclick="return confirm('¿Estás seguro de modificar esta categoria?');">
+                                            class="btn btn-sm btn-outline-secondary">
                                             Modificar
                                             </a>
                                             </div>
