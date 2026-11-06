@@ -40,7 +40,7 @@ include_once __DIR__ . '/views/includes/tienda/header.php';
 
                     <?php foreach ($categorias as $cat): ?>
                         <a href="index.php?categoria=<?= $cat['idCategoria']; ?>" 
-                           class="list-group-item list-group-item-action <?= $categoriaSeleccionada == $cat['idCategoria'] ? 'active bg-dark border-dark' : ''; ?>">
+                            class="list-group-item list-group-item-action <?= $categoriaSeleccionada == $cat['idCategoria'] ? 'active bg-dark border-dark' : ''; ?>">
                             <?= $cat['nombre']; ?>
                         </a>
                     <?php endforeach; ?>
@@ -57,7 +57,6 @@ include_once __DIR__ . '/views/includes/tienda/header.php';
                 ?>
             </h2>
             
-            <!-- Reducimos a un máximo de 3 tarjetas por fila para que entren bien al lado del aside -->
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                 
                 <?php if (!empty($productos)): ?>

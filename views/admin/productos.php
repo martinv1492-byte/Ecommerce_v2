@@ -17,15 +17,17 @@ $categorias = obtenerCategorias($conexion);
 </head>
 <body>
 
-    <!-- Contenedor general que divide la pantalla en dos columnas fijas -->
-<div class="container-fluid">
-        <div class="row">
+    <!-- Contenedor general que divide la pantalla en dos columnas fijas sin desborde -->
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
             
-            <div class="col-auto px-0 bg-dark">
+            <!-- Sidebar con ancho fijo para proteger el espacio de la tabla -->
+            <div class="col-auto px-0 bg-dark" style="width: 220px; min-height: 100vh;">
                 <?php include __DIR__ . '/../includes/admin/sidebar.php'; ?>
             </div>
 
-            <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4 py-4">
+            <!-- Contenido Principal -->
+            <div class="col px-md-4 py-4 overflow-hidden">
                 
                 <?php if (isset($_GET['status']) && $_GET['status'] === 'success'): ?>
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -66,21 +68,21 @@ $categorias = obtenerCategorias($conexion);
                 </form>
 
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered align-middle">
+                    <table class="table table-striped table-bordered align-middle table-sm">
                         <thead class="table-light">
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col" class="text-center">Nombre</th>
-                                <th scope="col" class="text-center">Codigo</th>
+                                <th scope="col" class="text-center d-none d-md-table-cell">Codigo</th>
                                 <th scope="col" class="text-center">Categoria</th>
-                                <th scope="col" class="text-center">Descripcion</th>
-                                <th scope="col" class="text-center">Costo</th>
+                                <th scope="col" class="text-center d-none d-xl-table-cell">Descripcion</th>
+                                <th scope="col" class="text-center d-none d-lg-table-cell">Costo</th>
                                 <th scope="col" class="text-center">Precio</th>
-                                <th scope="col" class="text-center">Foto</th>
+                                <th scope="col" class="text-center d-none d-sm-table-cell">Foto</th>
                                 <th scope="col" class="text-center">Proveedor</th>
                                 <th scope="col" class="text-center">Stock</th>
-                                <th scope="col" class="text-center">Marca</th>
-                                <th scope="col" colspan="2" class="text-center">Acciones</th>
+                                <th scope="col" class="text-center d-none d-lg-table-cell">Marca</th>
+                                <th scope="col" class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -89,23 +91,23 @@ $categorias = obtenerCategorias($conexion);
                                 <tr>
                                     <td><?php echo $producto["idProducto"]; ?></td>
                                     <td><?php echo htmlspecialchars($producto["nombre"]); ?></td>
-                                    <td><?php echo htmlspecialchars($producto["codigo"]); ?></td>
+                                    <td class="d-none d-md-table-cell"><?php echo htmlspecialchars($producto["codigo"]); ?></td>
                                     <td><?php echo htmlspecialchars($producto["nombre_categoria"] ?? 'Sin categoría'); ?></td>
-                                    <td><?php echo htmlspecialchars($producto["descripcion"]); ?></td>
-                                    <td>$<?php echo number_format($producto["costo"], 2); ?></td>
+                                    <td class="d-none d-xl-table-cell"><?php echo htmlspecialchars($producto["descripcion"]); ?></td>
+                                    <td class="d-none d-lg-table-cell">$<?php echo number_format($producto["costo"], 2); ?></td>
                                     <td>$<?php echo number_format($producto["precio"], 2); ?></td>
-                                    <td class="text-center">
-                                        <img src="<?php echo htmlspecialchars($producto["foto"]); ?>" style="width: 50px; height: 50px; object-fit: cover;" alt="Foto producto">
+                                    <td class="text-center d-none d-sm-table-cell">
+                                        <img src="<?php echo htmlspecialchars($producto["foto"]); ?>" style="width: 40px; height: 40px; object-fit: cover;" alt="Foto producto">
                                     </td>
                                     <td><?php echo htmlspecialchars($producto["nombre_proveedor"] ?? 'Sin proveedor'); ?></td>
                                     <td><?php echo $producto["stock"]; ?></td>
-                                    <td><?php echo htmlspecialchars($producto["marca"]); ?></td>
+                                    <td class="d-none d-lg-table-cell"><?php echo htmlspecialchars($producto["marca"]); ?></td>
                                     <td>
                                         <div class="d-flex gap-1 justify-content-center">
                                             <a href="producto_actualizar.php?id=<?php echo $producto['idProducto']; ?>" class="btn btn-sm btn-outline-secondary" title="Modificar">✏️</a>
                                             <a href="producto_eliminado.php?id=<?php echo $producto['idProducto']; ?>&nombre=<?php echo urlencode($producto['nombre']); ?>&marca=<?php echo urlencode($producto['marca']);?>" class="btn btn-sm btn-outline-danger" title="Eliminar">🗑️</a>
                                         </div>
-                                    </td>                                
+                                    </td>                                       
                                 </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
@@ -120,7 +122,7 @@ $categorias = obtenerCategorias($conexion);
             </div>
 
         </div>
-</div>
+    </div>
 
 <script src="/ecommerce/assets/js/bootstrap.bundle.min.js"></script>
 </body>
