@@ -4,14 +4,14 @@
         <div class="d-none d-lg-block" style="width: 150px;"></div>
 
         <!-- 2. Logo Gigante y Centrado -->
-        <a class="navbar-brand text-dark fs-1 fw-bold tracking-wider m-0" href="#" style="font-family: 'Times New Roman', serif;">
+        <a class="navbar-brand text-dark fs-1 fw-bold tracking-wider m-0" href="/ecommerce/index.php" style="font-family: 'Times New Roman', serif;">
             VINOTECA <span class="text-secondary">LA BARBA</span>
         </a>
 
         <!-- 3. Menú de Usuario y Carrito Minimalista (A la derecha) -->
         <div class="d-flex align-items-center gap-4" style="width: 150px; justify-content: flex-end;">
+            
             <a href="views/tienda/registro.php" class="text-muted text-decoration-none small d-none d-sm-inline">Registrarse aquí</a>
-            <a href="" class="text-muted text-decoration-none small d-none d-sm-inline">Iniciar Sesión</a>
             <!-- Carrito minimalista sin fondo de botón -->
             <a href="views/tienda/carrito.php" class="text-dark position-relative text-decoration-none">
                 <!-- Código nativo de la canasta (No necesita internet ni archivos de iconos) -->
