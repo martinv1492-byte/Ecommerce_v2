@@ -11,9 +11,6 @@
         <!-- 3. Imprimimos la ruta CORRECTA apuntando a assets -->
         <img src="assets/img/<?= $imagenVino; ?>" class="card-img-top img-fluid" alt="<?= $producto['nombre']; ?>" style="max-height: 100%; width: auto; object-fit: contain;">
     </div>
-
-
-
     <!-- 2. Información Dinámica -->
     <div class="card-body d-flex flex-column text-center px-3 pb-3">
         <!-- Bodega -->
@@ -27,7 +24,7 @@
         </h5>
         
         <!-- Cepa / Variedad y Tamaño -->
-        <p class="text-secondary small mb-3"><?= $producto['idCategoria'];  ?></p>
+        <p class="text-secondary small mb-3"><?= $producto['nombre_categoria'];  ?></p>
 
         <!-- Precio con formato de moneda -->
         <div class="mt-auto mb-3">

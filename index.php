@@ -12,12 +12,7 @@ $categoriaSeleccionada = isset($_GET['categoria']) ? $_GET['categoria'] : 'todas
 // Recordá cambiar '$conexion' por el nombre exacto de tu variable de PDO si se llama distinto (ej: $db o $pdo)
 $productos = obtenerProductos($conexion, $categoriaSeleccionada); 
 
-$categorias = [
-    ['idCategoria' => 1, 'nombre' => 'Tintos'],
-    ['idCategoria' => 2, 'nombre' => 'Blancos & Rosados'],
-    ['idCategoria' => 3, 'nombre' => 'Espumantes'],
-    ['idCategoria' => 4, 'nombre' => 'Destilados']
-];
+$categorias = obtenerCategorias($conexion); 
 
 // 1. Cargamos el head (abre el HTML, el <head> y el <body>)
 include_once __DIR__ . '/views/includes/tienda/head.php';
@@ -63,7 +58,7 @@ include_once __DIR__ . '/views/includes/tienda/header.php';
                 <?php if (!empty($productos)): ?>
                     <?php foreach ($productos as $producto): ?>
                         <div class="col">
-                            <?php include __DIR__ . '/views/componentes/tarjeta_producto.php'; ?>
+                            <?php include __DIR__ . '/views/includes/tienda/tarjeta_producto.php'; ?>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
