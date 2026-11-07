@@ -7,34 +7,38 @@ if (isset($_GET['verificado']) && $_GET['verificado'] === 'si') {
     $_SESSION['mayor_edad'] = true; // Guardamos el pase libre en la sesión
 }
 
-// 3. CONTROL DE ACCESO: Si NO está verificado en la sesión, frenamos el index aquí
-// y le clavamos la pantalla de inicio con el cartel obligatoriamente.
+// 3. CONTROL DE ACCESO
 if (!isset($_SESSION['mayor_edad'])) {
-    // Cargamos el archivo de inicio (ajustá la ruta según dónde lo guardaron)
     include_once __DIR__ . '/views/tienda/inicio.php';
-    exit(); // Matamos la ejecución del resto del index para que no se vean los vinos por detrás
+    exit(); 
 }
-// 1. Forzamos a que muestre errores por si algo de la base de datos falla
+
 require_once __DIR__ . '/config/config.php'; 
 require_once __DIR__ . '/models/producto.php'; 
 
-// 1. CAPTURA VISUAL: Guardamos la palabra tal cual viene de la URL para el diseño (ej: 'bebida-sin-alcohol')
-$categoriaSeleccionada = isset($_GET['categoria']) ? strtolower(trim($_GET['categoria'])) : 'todas';
+// 🔄 CAPTURA ÚNICA E INTELIGENTE DE LA URL
+$categoriaUrl = isset($_GET['categoria']) ? strtolower(trim($_GET['categoria'])) : 'inicio';
 
-// 2. TRADUCTOR PARA LA BASE DE DATOS: Creamos una variable auxiliar para el motor MySQL
-if ($categoriaSeleccionada === 'bebida-sin-alcohol' || $categoriaSeleccionada === 'sin-alcohol') {
-    $idFiltrado = 10; // Si es la rebelde, le mandamos el número a la BD
+// Traducimos los estados para la vista y la base de datos de forma limpia
+if ($categoriaUrl === 'inicio') {
+    $categoriaSeleccionada = 'inicio';
+    $idFiltrado = 'todas'; 
+} elseif ($categoriaUrl === 'todas') {
+    $categoriaSeleccionada = 'todas'; 
+    $idFiltrado = 'todas';
+} elseif ($categoriaUrl === 'bebida-sin-alcohol' || $categoriaUrl === 'sin-alcohol') {
+    $categoriaSeleccionada = 'bebida-sin-alcohol';
+    $idFiltrado = 10; 
 } else {
-    $idFiltrado = $categoriaSeleccionada; // Para las demás, le mandamos el texto (ej: 'ron')
+    $categoriaSeleccionada = $categoriaUrl;
+    $idFiltrado = $categoriaUrl; 
 }
 
-// 3. Traemos las categorías reales para el menú aside
+// Traemos los datos de MySQL una sola vez
 $categorias = obtenerCategorias($conexion); 
-
-// 🔥 CAMBIO AQUÍ: Le pasamos la variable auxiliar '$idFiltrado' al modelo
 $productos = obtenerProductosPorNombreCategoria($conexion, $idFiltrado);
 
-include_once 'views/includes/tienda/head.php'; // Ajustá el nombre de tu carpeta si es layout o includes
+include_once 'views/includes/tienda/head.php'; 
 include_once 'views/includes/tienda/header.php';
 ?>
 <main class="container my-5">
@@ -52,14 +56,12 @@ include_once 'views/includes/tienda/header.php';
                     <i class="bi bi-chevron-down small"></i>
                 </button>
 
-                <!-- Cortina flotante con clases de Bootstrap -->
-                <!-- Modificá la etiqueta del div colapsable para que quede así: -->
-                <div class="collapse <?= $categoriaSeleccionada !== 'todas' ? 'show' : ''; ?> position-absolute start-0 w-100 bg-white shadow-lg border" id="cortinaCategorias" style="z-index: 1050; top: 100%;">
-
+                <!-- Cortina flotante con clases de Bootstrap (Se abre solo si está filtrando) -->
+                <div class="collapse <?= ($categoriaSeleccionada !== 'inicio' && $categoriaSeleccionada !== 'todas') ? 'show' : ''; ?> position-absolute start-0 w-100 bg-white shadow-lg border" id="cortinaCategorias" style="z-index: 1050; top: 100%;">
                     <div class="list-group list-group-flush">
                         
-                        <a href="index.php" class="list-group-item list-group-item-action <?= $categoriaSeleccionada === 'todas' ? 'active bg-dark border-dark' : ''; ?> fw-semibold py-2.5">
-                            Ver todas las categorías
+                        <a href="index.php?categoria=todas" class="list-group-item list-group-item-action <?= $categoriaSeleccionada === 'todas' ? 'active bg-dark border-dark' : ''; ?> fw-semibold py-2.5">
+                            Ver todos los productos
                         </a>
 
                         <?php foreach ($categorias as $cat): 
@@ -77,15 +79,12 @@ include_once 'views/includes/tienda/header.php';
             </div>
         </aside>
 
-        <!-- 🍷 COLUMNA DERECHA: SECCIÓN DINÁMICA (Ancho de 9 de 12 columnas) -->
+        <!-- 🍷 COLUMNA DERECHA: SECCIÓN DINÁMICA -->
         <section class="col-md-9">
             
-            <?php 
-            // Evaluamos: Si el usuario NO eligió ninguna categoría todavía, mostramos la Portada
-            if ($categoriaSeleccionada === 'todas'): 
-            ?>
+            <?php if ($categoriaSeleccionada === 'inicio'): ?>
                 
-                <!-- 🏛️ PORTADA DE BIENVENIDA (Esto es lo primero que verán al entrar) -->
+                <!-- 🏛️ PORTADA DE BIENVENIDA -->
                 <div class="p-5 mb-4 bg-white border text-center shadow-sm rounded-0">
                     <h1 class="display-4 fw-bold mb-3" style="font-family: 'Times New Roman', serif; letter-spacing: 1px;">
                         Bienvenido a Vinoteca La Barba
@@ -121,29 +120,16 @@ include_once 'views/includes/tienda/header.php';
                     </div>
                 </div>
 
-            <?php 
-            else: 
-            // SI EL USUARIO HIZO CLIC EN UNA CATEGORÍA: Ocultamos la portada y dibujamos el catálogo
-            ?>
+            <?php else: ?>
                 
-                <!-- Título del Catálogo que muestra el nombre de la categoría elegida -->
+                <!-- Título del Catálogo Dinámico sin guiones -->
                 <h2 class="mb-4 fw-bold text-uppercase pb-2 border-bottom text-dark" style="font-family: 'Times New Roman', serif; letter-spacing: 1px; font-size: 1.75rem;">
                     <?php 
-        // Filtramos de forma manual cada palabra de la URL para poner el título lindo
                         if ($categoriaSeleccionada === 'todas') {
-                            echo "Nuestra Selección";
-                        } elseif ($categoriaSeleccionada === 'bebida-sin-alcohol' || $categoriaSeleccionada === 'sin-alcohol') {
+                            echo "Nuestro Catálogo Completo";
+                        } elseif ($categoriaSeleccionada === 'bebida-sin-alcohol') {
                             echo "Bebidas sin alcohol";
-                        } elseif ($categoriaSeleccionada === 'vino') {
-                            echo "Vinos";
-                        } elseif ($categoriaSeleccionada === 'espumante') {
-                            echo "Espumantes";
-                        } elseif ($categoriaSeleccionada === 'vodka') {
-                            echo "Vodkas";
-                        } elseif ($categoriaSeleccionada === 'ron') {
-                            echo "Rones";
                         } else {
-                            // Por si hay otra categoría, muestra el texto de la URL suelto
                             echo htmlspecialchars($categoriaSeleccionada);
                         }
                     ?>
@@ -158,9 +144,8 @@ include_once 'views/includes/tienda/header.php';
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <!-- Mensaje de alerta por si esa categoría justa está vacía en MySQL -->
                         <div class="col-12 text-center py-5">
-                            <p class="text-muted fs-5">No hay vinos disponibles en la categoría <strong><?= htmlspecialchars($categoriaSeleccionada); ?></strong> en este momento.</p>
+                            <p class="text-muted fs-5">No hay vinos disponibles en esta categoría en este momento.</p>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -172,5 +157,5 @@ include_once 'views/includes/tienda/header.php';
 </main>
 
 <?php 
-include_once 'views/includes/tienda/footer.php'; ?>
+include_once 'views/includes/tienda/footer.php'; 
 ?>
