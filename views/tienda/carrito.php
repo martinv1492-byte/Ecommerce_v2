@@ -64,16 +64,16 @@ include_once '../includes/tienda/header.php';
                             <!-- Control de Cantidad (+ / -) -->
                             <div class="col-6 col-md-3">
                                 <div class="input-group input-group-sm" style="max-width: 120px;">
-                                    <a href="/ecommerce/controllers/tienda/carrito_actualizar.php?id=<?= $idProducto; ?>&accion=restar" class="btn btn-outline-dark rounded-0">-</a>
+                                    <a href="/ecommerce/controllers/carrito_actualizar.php?id=<?= $idProducto; ?>&accion=restar" class="btn btn-outline-dark rounded-0">-</a>
                                     <input type="text" class="form-control text-center border-dark bg-white" value="<?= $item['cantidad']; ?>" readonly>
-                                    <a href="/ecommerce/controllers/tienda/carrito_actualizar.php?id=<?= $idProducto; ?>&accion=sumar" class="btn btn-outline-dark rounded-0">+</a>
+                                    <a href="/ecommerce/controllers/carrito_actualizar.php?id=<?= $idProducto; ?>&accion=sumar" class="btn btn-outline-dark rounded-0">+</a>
                                 </div>
                             </div>
                             
                             <!-- Precio y Botón Eliminar -->
                             <div class="col-6 col-md-2 text-end">
                                 <span class="fw-bold d-block mb-2">$<?= number_format($item['precio'] * $item['cantidad'], 0, ',', '.'); ?></span>
-                                <a href="/ecommerce/controllers/tienda/carrito_eliminar.php?id=<?= $idProducto; ?>" class="text-danger text-decoration-none small">
+                                <a href="/ecommerce/controllers/carrito_eliminar.php?id=<?= $idProducto; ?>" class="text-danger text-decoration-none small">
                                     <i class="bi bi-trash3 me-1"></i> Quitar
                                 </a>
                             </div>

@@ -27,6 +27,8 @@ include_once '../includes/tienda/header.php';
                                         echo "El correo electrónico ya se encuentra registrado.";
                                     } elseif ($_GET['error'] === 'campos_vacios') {
                                         echo "Por favor, completa todos los campos obligatorios.";
+                                    } elseif ($_GET['error'] === 'debe_iniciar_sesion') {
+                                        echo "Por favor, inicie sesion o registrese para finalizar su compra.";
                                     } else {
                                         echo "Ocurrió un error al procesar el registro.";
                                     }

@@ -41,6 +41,15 @@ $productos = obtenerProductosPorNombreCategoria($conexion, $idFiltrado);
 include_once 'views/includes/tienda/head.php'; 
 include_once 'views/includes/tienda/header.php';
 ?>
+<?php if (isset($_GET['status']) && $_GET['status'] === 'compra_exitosa'): ?>
+    <div class="alert alert-success alert-dismissible fade show rounded-0 m-4 shadow-sm" role="alert">
+        <h4 class="alert-heading fw-bold text-uppercase fs-6 mb-1">¡Compra realizada con éxito!</h4>
+        <p class="mb-0 small">
+            Tu pedido <strong>#<?= htmlspecialchars($_GET['orden']); ?></strong> ha sido registrado correctamente y el stock ha sido actualizado. ¡Gracias por tu compra en la vinoteca!
+        </p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
 <main class="container my-5">
     <div class="row">
         <!-- 🏛️ COLUMNA IZQUIERDA: EL ASIDE DESPLEGABLE POR CLIC -->
@@ -87,7 +96,7 @@ include_once 'views/includes/tienda/header.php';
                 <!-- 🏛️ PORTADA DE BIENVENIDA -->
                 <div class="p-5 mb-4 bg-white border text-center shadow-sm rounded-0">
                     <h1 class="display-4 fw-bold mb-3" style="font-family: 'Times New Roman', serif; letter-spacing: 1px;">
-                        Bienvenido a Vinoteca La Barba
+                        Bienvenido a Vinoteca El Barba
                     </h1>
                     <p class="fs-5 text-muted max-w-2xl mx-auto">
                         Descubrí nuestra exclusiva selección de cosechas premiadas, bodegas boutique e historias embotelladas. 
