@@ -2,12 +2,12 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// 2. Si el usuario acaba de hacer clic en el "SÍ" del cartel de inicio.php
+
+// 1. Control de mayoría de edad (Tu lógica idéntica)
 if (isset($_GET['verificado']) && $_GET['verificado'] === 'si') {
-    $_SESSION['mayor_edad'] = true; // Guardamos el pase libre en la sesión
+    $_SESSION['mayor_edad'] = true; 
 }
 
-// 3. CONTROL DE ACCESO
 if (!isset($_SESSION['mayor_edad'])) {
     include_once __DIR__ . '/views/tienda/inicio.php';
     exit(); 
@@ -16,34 +16,72 @@ if (!isset($_SESSION['mayor_edad'])) {
 require_once __DIR__ . '/config/config.php'; 
 require_once __DIR__ . '/models/producto.php'; 
 
-// 🔄 CAPTURA ÚNICA E INTELIGENTE DE LA URL
+// 2. CAPTURA Y TRADUCTOR DE CATEGORÍAS (Esto soluciona los warnings de la pantalla)
 $categoriaUrl = isset($_GET['categoria']) ? strtolower(trim($_GET['categoria'])) : 'inicio';
 $terminoBusqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
+
+if (!empty($terminoBusqueda)) {
+    $categoriaSeleccionada = 'busqueda';
+    $idFiltrado = 'todas'; // Para que traiga los productos latentes que va a filtrar el LIKE
+} else {
+    if ($categoriaUrl === 'inicio') {
+        $categoriaSeleccionada = 'inicio';
+        $idFiltrado = 'todas'; 
+    } elseif ($categoriaUrl === 'todas') {
+        $categoriaSeleccionada = 'todas'; 
+        $idFiltrado = 'todas';
+    } elseif ($categoriaUrl === 'bebida-sin-alcohol' || $categoriaUrl === 'sin-alcohol') {
+        $categoriaSeleccionada = 'bebida-sin-alcohol';
+        $idFiltrado = 10; 
+    } else {
+        $categoriaSeleccionada = $categoriaUrl;
+        $idFiltrado = $categoriaUrl; 
+    }
+}
+
+// 3. TRAEMOS LOS DATOS INICIALES DE MYSQL
 $categorias = obtenerCategorias($conexion); 
 
-// Evaluamos si el usuario usó el buscador o la navegación tradicional
-if (!empty($terminoBusqueda)) {
-    // Activamos un estado especial para el diseño y llamamos a la función de búsqueda
-    $categoriaSeleccionada = 'busqueda';
+// Si el usuario buscó por palabra, usamos la función del buscador. Si no, la tradicional de categoría.
+if ($categoriaSeleccionada === 'busqueda') {
     $productos = buscarProductosPorTexto($conexion, $terminoBusqueda);
 } else {
-        // Traducimos los estados para la vista y la base de datos de forma limpia
-        if ($categoriaUrl === 'inicio') {
-            $categoriaSeleccionada = 'inicio';
-            $idFiltrado = 'todas'; 
-        } elseif ($categoriaUrl === 'todas') {
-            $categoriaSeleccionada = 'todas'; 
-            $idFiltrado = 'todas';
-        } elseif ($categoriaUrl === 'bebida-sin-alcohol' || $categoriaUrl === 'sin-alcohol') {
-            $categoriaSeleccionada = 'bebida-sin-alcohol';
-            $idFiltrado = 10; 
-        } else {
-            $categoriaSeleccionada = $categoriaUrl;
-            $idFiltrado = $categoriaUrl; 
-        }
-        // Traemos los datos de MySQL una sola vez
-        $productos = obtenerProductosPorNombreCategoria($conexion, $idFiltrado);
+    $productos = obtenerProductosPorNombreCategoria($conexion, $idFiltrado);
 }
+// =========================================================================
+// 🚀 4. RUTEADOR DE DETALLE INTELIGENTE (SOLUCIÓN TOTAL PARA TODO EL CATÁLOGO)
+// =========================================================================
+$productoUrl = isset($_GET['producto']) ? strtolower(trim($_GET['producto'])) : '';
+
+if (!empty($productoUrl)) {
+    
+    // 💡 CAMBIO CLAVE: Usamos 'obtenerProductos' que no se deja heredar por los $_GET de la URL
+    // y te garantiza traer la base de datos completa de productos para comparar.
+    $todosLosProductos = obtenerProductos($conexion);
+    
+    $producto = null;
+    foreach ($todosLosProductos as $p) {
+        // Pasamos el nombre de la base de datos al formato limpio con guiones (ej: "gran-reserva-malbec")
+        $nombreFormateado = str_replace(' ', '-', strtolower($p['nombre']));
+        if ($nombreFormateado === $productoUrl) {
+            $producto = $p;
+            break;
+        }
+    }
+
+    if ($producto) {
+        // Si hay coincidencia, inyectamos tu vista de detalle grande y frenamos el index
+        include_once __DIR__ . '/views/tienda/producto_detalle.php';
+        exit(); 
+    } else {
+        echo "<h2 class='text-center my-5'>El producto solicitado no se encuentra disponible.</h2>";
+        exit();
+    }
+}
+// =========================================================================
+
+// =========================================================================
+// 5. INCLUDES DE LA CABECERA (Se cargan abajo para que ya conozcan las variables limpias)
 include_once 'views/includes/tienda/head.php'; 
 include_once 'views/includes/tienda/header.php';
 ?>

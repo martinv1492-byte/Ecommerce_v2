@@ -6,15 +6,16 @@
             $nombreFoto = "producto_" . $producto['idProducto'] . ".jpg";
             
             // 2. Verificamos si el archivo existe en tu carpeta assets. Si no existe, usa una genérica.
-            $imagenVino = file_exists("assets/img/" . $nombreFoto) ? $nombreFoto : 'botella_generica.jpg'; 
+            $imagenVino = file_exists("assets/img/" . $nombreFoto) ? $nombreFoto : 'botella_generica.jpg';
+
+            // 🔥 LA SOLUCIÓN: Convertimos el nombre de la categoría REAL de este producto en el slug
+            // (ej: si el producto es un Malbec, va a leer "Vino" de la BD y lo transformará a "vino")
+            $slugCategoria = str_replace(' ', '-', strtolower($producto['nombre_categoria']));
         ?>
         <!-- 🔥 MODIFICACIÓN 1: Convertimos el enlace en un contenedor Flexbox centrado al 100% de la caja gris -->
-        <a href="views/tienda/producto_detalle.php" class="d-flex align-items-center justify-content-center h-100 w-100 text-decoration-none">
-            <!-- 🔥 MODIFICACIÓN 2: Limpiamos los estilos para que escale de forma perfecta sin deformarse -->
-            <img src="assets/img/<?= $imagenVino; ?>" 
-                 class="img-fluid" 
-                 alt="<?= $producto['nombre']; ?>" 
-                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
+        <a href="index.php?categoria=<?= $slugCategoria; ?>&producto=<?= str_replace(' ', '-', strtolower($producto['nombre'])); ?>" 
+            class="d-flex align-items-center justify-content-center h-100 w-100 text-decoration-none">
+                <img src="assets/img/<?= $imagenVino; ?>" class="img-fluid" alt="<?= $producto['nombre']; ?>" style="max-height: 100%; max-width: 100%; object-fit: contain;">
         </a>
     </div>
     <!-- 2. Información Dinámica -->
@@ -25,10 +26,12 @@
         </span>
         
         <!-- Nombre del Vino -->
-        <a href="views/tienda/producto_detalle.php" class="text-decoration-none text-dark">
-            <h5 class="card-title fw-bold mb-2" style="font-family: 'Times New Roman', serif; font-size: 1.15rem;">
-                <?= $producto['nombre']; ?>
-            </h5>
+        <!-- Buscá los enlaces href en tu tarjeta y dejalos configurados así: -->
+        <a href="index.php?categoria=<?= $slugCategoria; ?>&producto=<?= str_replace(' ', '-', strtolower($producto['nombre'])); ?>" 
+            class="text-decoration-none text-dark">
+                <h5 class="card-title fw-bold mb-2" style="font-family: 'Times New Roman', serif; font-size: 1.15rem;">
+                    <?= $producto['nombre']; ?>
+                </h5>
         </a>
 
         <!-- Cepa / Variedad y Tamaño -->
