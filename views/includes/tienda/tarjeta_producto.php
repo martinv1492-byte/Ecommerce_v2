@@ -31,9 +31,15 @@
             <span class="fs-5 fw-bold text-dark">$<?= number_format($producto['precio'], 2, ',', '.'); ?></span>
         </div>
 
-        <!-- Botón de Acción con ID dinámico (Útil para programar el carrito con JS/Ajax más adelante) -->
-        <button class="btn btn-outline-dark rounded-0 w-100 py-2 text-uppercase fw-semibold" data-id="<?= $producto['idProducto']; ?>" style="font-size: 0.8rem; letter-spacing: 0.5px;">
-            Añadir a la canasta
-        </button>
+        <form action="/ecommerce/controllers/carrito_agregar.php" method="POST">
+
+    <input type="hidden" name="id" value="<?= $producto['idProducto']; ?>">
+
+    <input type="hidden" name="cantidad" value="1">
+    
+    <button type="submit" class="btn btn-outline-dark rounded-0 w-100 py-2 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+        Añadir a la canasta
+    </button>
+</form>
     </div>
 </div>

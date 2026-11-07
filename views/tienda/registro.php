@@ -62,7 +62,7 @@ include_once '../includes/tienda/header.php';
 
                         <!-- Enlace de retorno adaptado al color del sitio -->
                         <div class="text-center mt-3">
-                            <a href="login.php" class="text-dark small fw-semibold text-decoration-underline">¿Ya tienes una cuenta? Inicia sesión aquí</a>
+                            <a href="iniciosesion.php" class="text-dark small fw-semibold text-decoration-underline">¿Ya tienes una cuenta? Inicia sesión aquí</a>
                         </div>
 
                     </div>

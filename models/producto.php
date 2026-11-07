@@ -71,3 +71,35 @@ function eliminarProducto(PDO $conexion, int $idProducto){
     $stmt = $conexion->prepare($sql);
     return $stmt->execute([ ':id' => $idProducto ]);
 }
+
+// FUNCIÓN HÍBRIDA EXCLUSIVA PARA LA TIENDA Y LAS URLS AMIGABLES
+function obtenerProductosPorNombreCategoria(PDO $conexion, $categoriaSeleccionada = 'todas') {
+    if ($categoriaSeleccionada !== 'todas' && !empty($categoriaSeleccionada)) {
+        
+        // Evaluamos si es un ID numérico (para el detalle o enlaces manuales) o texto (para el aside)
+        if (is_numeric($categoriaSeleccionada)) {
+            $condicion = "p.idProducto = :categoriaSeleccionada";
+        } else {
+            $condicion = "LOWER(TRIM(c.nombre)) = :categoriaSeleccionada";
+        }
+
+        $sql = "SELECT p.*, pr.nombre AS nombre_proveedor, c.nombre AS nombre_categoria 
+                FROM productos p 
+                LEFT JOIN proveedores pr ON p.idProveedor = pr.idProveedor 
+                LEFT JOIN categorias c ON p.idCategoria = c.idCategoria 
+                WHERE $condicion";
+                
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([':categoriaSeleccionada' => $categoriaSeleccionada]);
+    } else {
+        $sql = "SELECT p.*, pr.nombre AS nombre_proveedor, c.nombre AS nombre_categoria 
+                FROM productos p 
+                LEFT JOIN proveedores pr ON p.idProveedor = pr.idProveedor
+                LEFT JOIN categorias c ON p.idCategoria = c.idCategoria";
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute();
+    }
+    
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+?>
