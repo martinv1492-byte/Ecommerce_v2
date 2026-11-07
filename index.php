@@ -32,7 +32,7 @@ if (!empty($terminoBusqueda)) {
         $idFiltrado = 'todas';
     } elseif ($categoriaUrl === 'bebida-sin-alcohol' || $categoriaUrl === 'sin-alcohol') {
         $categoriaSeleccionada = 'bebida-sin-alcohol';
-        $idFiltrado = 10; 
+        $idFiltrado = 'bebida-sin-alcohol'; 
     } else {
         $categoriaSeleccionada = $categoriaUrl;
         $idFiltrado = $categoriaUrl; 
@@ -49,20 +49,22 @@ if ($categoriaSeleccionada === 'busqueda') {
     $productos = obtenerProductosPorNombreCategoria($conexion, $idFiltrado);
 }
 // =========================================================================
-// 🚀 4. RUTEADOR DE DETALLE INTELIGENTE (SOLUCIÓN TOTAL PARA TODO EL CATÁLOGO)
+// =========================================================================
+// 🚀 4. RUTEADOR DE DETALLE INTELIGENTE BLINDADO (REEMPLAZÁ ESTE BLOQUE)
 // =========================================================================
 $productoUrl = isset($_GET['producto']) ? strtolower(trim($_GET['producto'])) : '';
 
 if (!empty($productoUrl)) {
     
-    // 💡 CAMBIO CLAVE: Usamos 'obtenerProductos' que no se deja heredar por los $_GET de la URL
-    // y te garantiza traer la base de datos completa de productos para comparar.
-    $todosLosProductos = obtenerProductos($conexion);
+    // Traemos todo el catálogo de la cava para comparar de forma segura
+    $todosLosProductos = obtenerProductosPorNombreCategoria($conexion, 'todas');
     
     $producto = null;
     foreach ($todosLosProductos as $p) {
-        // Pasamos el nombre de la base de datos al formato limpio con guiones (ej: "gran-reserva-malbec")
-        $nombreFormateado = str_replace(' ', '-', strtolower($p['nombre']));
+        // 🔍 LIMPIEZA EXTREMA: Quitamos espacios dobles ocultos y espacios al inicio/final
+        $nombreLimpioBD = preg_replace('/\s+/', ' ', trim($p['nombre']));
+        $nombreFormateado = str_replace(' ', '-', strtolower($nombreLimpioBD));
+        
         if ($nombreFormateado === $productoUrl) {
             $producto = $p;
             break;
@@ -70,7 +72,7 @@ if (!empty($productoUrl)) {
     }
 
     if ($producto) {
-        // Si hay coincidencia, inyectamos tu vista de detalle grande y frenamos el index
+        // Si hay match, inyectamos tu vista de detalle grande y frenamos el index
         include_once __DIR__ . '/views/tienda/producto_detalle.php';
         exit(); 
     } else {
@@ -79,6 +81,7 @@ if (!empty($productoUrl)) {
     }
 }
 // =========================================================================
+
 
 // =========================================================================
 // 5. INCLUDES DE LA CABECERA (Se cargan abajo para que ya conozcan las variables limpias)
