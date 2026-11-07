@@ -102,4 +102,21 @@ function obtenerProductosPorNombreCategoria(PDO $conexion, $categoriaSeleccionad
     
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+function buscarProductosPorTexto(PDO $conexion, $termino) {
+    // El operador LIKE requiere los comodines % antes y después de la palabra
+    $busquedaConComodines = "%" . $termino . "%";
+    
+    $sql = "SELECT p.*, pr.nombre AS nombre_proveedor, c.nombre AS nombre_categoria 
+            FROM productos p 
+            LEFT JOIN proveedores pr ON p.idProveedor = pr.idProveedor 
+            LEFT JOIN categorias c ON p.idCategoria = c.idCategoria 
+            WHERE LOWER(p.nombre) LIKE :busqueda 
+               OR LOWER(p.marca) LIKE :busqueda 
+               OR LOWER(c.nombre) LIKE :busqueda";
+               
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute([':busqueda' => strtolower($busquedaConComodines)]);
+    
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
