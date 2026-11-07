@@ -31,7 +31,7 @@ include_once '../includes/tienda/header.php';
     <?php if (empty($_SESSION['carrito'])): ?>
         <div class="text-center py-5">
             <p class="text-muted fs-5 mb-4">Tu canasta de compras está vacía.</p>
-            <a href="/ecommerce/index.php" class="btn btn-dark rounded-0 text-uppercase fw-semibold px-4 py-3" style="font-size: 0.8rem; letter-spacing: 1px;">
+            <a href="/ecommerce/index.php?categoria=todas" class="btn btn-dark rounded-0 text-uppercase fw-semibold px-4 py-3" style="font-size: 0.8rem; letter-spacing: 1px;">
                 Ver Catálogo de Vinos
             </a>
         </div>

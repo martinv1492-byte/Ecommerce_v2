@@ -46,7 +46,7 @@
             </ul>
 
             <!-- Buscador a la derecha integrado en la barra negra -->
-            <form action="index.php" method="GET" class="d-flex my-2 my-lg-0" role="search" style="max-width: 300px;">
+            <form action="/ecommerce/index.php" method="GET" class="d-flex my-2 my-lg-0" role="search" style="max-width: 300px;">
                 <input type="text" name="busqueda" class="form-control rounded-0 border-0 px-3" placeholder="Buscar productos..." value="<?= isset($_GET['busqueda']) ? htmlspecialchars($_GET['busqueda']) : ''; ?>">
         
                 <button type="submit" class="btn btn-danger rounded-0 px-3 d-flex align-items-center justify-content-center" style="background-color: #dc3545;">

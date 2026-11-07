@@ -8,8 +8,14 @@
             // 2. Verificamos si el archivo existe en tu carpeta assets. Si no existe, usa una genérica.
             $imagenVino = file_exists("assets/img/" . $nombreFoto) ? $nombreFoto : 'botella_generica.jpg'; 
         ?>
-        <!-- 3. Imprimimos la ruta CORRECTA apuntando a assets -->
-        <img src="assets/img/<?= $imagenVino; ?>" class="card-img-top img-fluid" alt="<?= $producto['nombre']; ?>" style="max-height: 100%; width: auto; object-fit: contain;">
+        <!-- 🔥 MODIFICACIÓN 1: Convertimos el enlace en un contenedor Flexbox centrado al 100% de la caja gris -->
+        <a href="views/tienda/producto_detalle.php" class="d-flex align-items-center justify-content-center h-100 w-100 text-decoration-none">
+            <!-- 🔥 MODIFICACIÓN 2: Limpiamos los estilos para que escale de forma perfecta sin deformarse -->
+            <img src="assets/img/<?= $imagenVino; ?>" 
+                 class="img-fluid" 
+                 alt="<?= $producto['nombre']; ?>" 
+                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
+        </a>
     </div>
     <!-- 2. Información Dinámica -->
     <div class="card-body d-flex flex-column text-center px-3 pb-3">
@@ -19,10 +25,12 @@
         </span>
         
         <!-- Nombre del Vino -->
-        <h5 class="card-title fw-bold mb-2" style="font-family: 'Times New Roman', serif; font-size: 1.15rem;">
-            <?= $producto['nombre']; ?>
-        </h5>
-        
+        <a href="views/tienda/producto_detalle.php" class="text-decoration-none text-dark">
+            <h5 class="card-title fw-bold mb-2" style="font-family: 'Times New Roman', serif; font-size: 1.15rem;">
+                <?= $producto['nombre']; ?>
+            </h5>
+        </a>
+
         <!-- Cepa / Variedad y Tamaño -->
         <p class="text-secondary small mb-3"><?= $producto['nombre_categoria'];  ?></p>
 
@@ -30,10 +38,5 @@
         <div class="mt-auto mb-3">
             <span class="fs-5 fw-bold text-dark">$<?= number_format($producto['precio'], 2, ',', '.'); ?></span>
         </div>
-
-        <!-- Botón de Acción con ID dinámico (Útil para programar el carrito con JS/Ajax más adelante) -->
-        <button class="btn btn-outline-dark rounded-0 w-100 py-2 text-uppercase fw-semibold" data-id="<?= $producto['idProducto']; ?>" style="font-size: 0.8rem; letter-spacing: 0.5px;">
-            Añadir a la canasta
-        </button>
     </div>
 </div>
