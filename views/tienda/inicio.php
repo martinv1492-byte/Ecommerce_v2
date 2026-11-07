@@ -14,7 +14,7 @@ include_once 'views/includes/tienda/header.php';
         <div class="col-md-8 bg-white p-5 border shadow-sm rounded-0">
             <!-- Logo o Marca -->
             <h1 class="display-3 fw-bold mb-4" style="font-family: 'Times New Roman', serif; letter-spacing: 2px;">
-                VINOTECA LA BARBA
+                VINOTECA EL BARBA
             </h1>
             <p class="fs-5 text-muted mb-4">
                 Bienvenidos a nuestra cava digital. Una curaduría exclusiva de las mejores bodegas boutique y destilados premium de la región.

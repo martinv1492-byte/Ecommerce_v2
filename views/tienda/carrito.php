@@ -8,7 +8,6 @@ if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
 }
 
-
 $subtotalGeneral = 0;
 $cantidadTotalItems = 0;
 
@@ -23,6 +22,15 @@ include_once '../includes/tienda/header.php';
 ?>
 
 <main class="container my-5" style="min-height: 65vh;">
+    <!-- Alertas de error por stock insuficiente -->
+    <?php if (isset($_GET['error']) && $_GET['error'] === 'stock_insuficiente'): ?>
+        <div class="alert alert-danger rounded-0 alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> 
+            Lo sentimos, uno o más productos de tu canasta se quedaron sin stock suficiente. Por favor, ajusta las cantidades para continuar.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
     <!-- Título de la sección -->
     <h2 class="mb-5 fw-bold text-uppercase pb-2 border-bottom" style="font-family: 'Times New Roman', serif; letter-spacing: 1px;">
         Tu Canasta de Compras
@@ -114,10 +122,28 @@ include_once '../includes/tienda/header.php';
                         <span class="fw-bold fs-4 text-dark">$<?= number_format($subtotalGeneral, 0, ',', '.'); ?></span>
                     </div>
 
-                    <!-- Botón principal de checkout -->
-                    <a href="checkout.php" class="btn btn-dark rounded-0 w-100 py-3 text-uppercase fw-semibold text-center text-decoration-none" style="font-size: 0.85rem; letter-spacing: 1px;">
-                        Iniciar Finalización de Compra
-                    </a>
+                    <!-- Botón principal de checkout con validación de sesión limpia -->
+                    <?php if (isset($_SESSION['usuario_id'])): ?>
+                        <!-- Si está logueado, enviamos directo al procesador -->
+                        <form action="/ecommerce/controllers/procesar_checkout.php" method="POST">
+                            <button type="submit" class="btn btn-dark rounded-0 w-100 py-3 text-uppercase fw-semibold text-center" style="font-size: 0.85rem; letter-spacing: 1px;">
+                                Iniciar Finalización de Compra
+                            </button>
+                        </form>
+                    <?php else: ?>
+                        <!-- Si NO está logueado, avisamos y mostramos botones de acceso -->
+                        <div class="alert alert-warning text-center small rounded-0 mb-3 py-2" role="alert">
+                            Debes iniciar sesión para finalizar tu compra.
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a href="/ecommerce/login.php" class="btn btn-dark rounded-0 w-50 py-2 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+                                Iniciar Sesión
+                            </a>
+                            <a href="/ecommerce/views/tienda/registro.php" class="btn btn-outline-dark rounded-0 w-50 py-2 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+                                Registrarse
+                            </a>
+                        </div>
+                    <?php endif; ?>
                     
                     <p class="text-center text-muted small mt-3 m-0">
                         <i class="bi bi-shield-check me-1"></i> Compra 100% protegida y segura

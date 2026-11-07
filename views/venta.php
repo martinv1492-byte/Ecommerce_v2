@@ -1,4 +1,4 @@
-class Venta {
+<?php class Venta {
     private $conexion;
 
     public function __construct($conexionDB) {
@@ -48,3 +48,4 @@ class Venta {
         }
     }
 }
+?>

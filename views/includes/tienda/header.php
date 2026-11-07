@@ -1,10 +1,10 @@
 <?php
-// Asegurarnos de tener la sesión iniciada para leer el carrito
+// Asegurarnos de tener la sesión iniciada para leer el carrito y el usuario
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 1. Detectamos si la página actual es el carrito
+// Detectamos si la página actual es el carrito
 $esPaginaCarrito = basename($_SERVER['PHP_SELF']) === 'carrito.php';
 
 $cantidadTotalCarrito = 0;
@@ -21,15 +21,25 @@ if (isset($_SESSION['carrito'])) {
         <div class="d-none d-lg-block" style="width: 150px;"></div>
 
         <a class="navbar-brand text-dark fs-1 fw-bold tracking-wider m-0" href="/ecommerce/index.php" style="font-family: 'Times New Roman', serif;">
-            VINOTECA <span class="text-secondary">LA BARBA</span>
+            VINOTECA <span class="text-secondary">EL BARBA</span>
         </a>
 
-        <div class="d-flex align-items-center gap-4" style="width: 150px; justify-content: flex-end;">
+        <div class="d-flex align-items-center gap-3" style="justify-content: flex-end;">
             
-            <a href="/ecommerce/views/tienda/registro.php" class="text-muted text-decoration-none small d-none d-sm-inline">Registrarse aquí</a>
-            
+            <!-- 👤 ZONA DINÁMICA DE USUARIO / SESIÓN -->
+            <?php if (isset($_SESSION['usuario_id'])): ?>
+                <span class="text-muted small d-none d-md-inline">Hola, <strong><?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Usuario'); ?></strong></span>
+                <a href="/ecommerce/controllers/logout.php" class="btn btn-outline-danger btn-sm rounded-0 text-uppercase fw-semibold" style="font-size: 0.7rem;">
+                    Salir
+                </a>
+            <?php else: ?>
+                <a href="/ecommerce/login.php" class="text-dark text-decoration-none small fw-semibold">Iniciar Sesión</a>
+                <a href="/ecommerce/views/tienda/registro.php" class="text-muted text-decoration-none small d-none d-sm-inline">Registrarse aquí</a>
+            <?php endif; ?>
+
+            <!-- 🛒 ICONO DE CARRITO -->
             <?php if (!$esPaginaCarrito): ?>
-                <a href="/ecommerce/views/tienda/carrito.php" class="text-dark position-relative text-decoration-none">
+                <a href="/ecommerce/views/tienda/carrito.php" class="text-dark position-relative text-decoration-none ms-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-basket3 me-1" viewBox="0 0 16 16" style="vertical-align: middle;">
                         <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-.538-6h10.288l-.538 6H3.394zm1.12-5l.429 4h7.114l.429-4H4.514z"/>
                     </svg>

@@ -5,5 +5,5 @@ session_unset(); // Limpiamos todas las variables de sesión
 session_destroy(); // Destruimos la sesión por completo
 
 // Redirigimos al usuario al login con un mensaje opcional
-header("Location: views/login.php?mensaje=logout+exitoso");
+header("Location: /ecommerce/login.php?mensaje=logout+exitoso");
 exit();
