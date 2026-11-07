@@ -18,26 +18,32 @@ require_once __DIR__ . '/models/producto.php';
 
 // 🔄 CAPTURA ÚNICA E INTELIGENTE DE LA URL
 $categoriaUrl = isset($_GET['categoria']) ? strtolower(trim($_GET['categoria'])) : 'inicio';
-
-// Traducimos los estados para la vista y la base de datos de forma limpia
-if ($categoriaUrl === 'inicio') {
-    $categoriaSeleccionada = 'inicio';
-    $idFiltrado = 'todas'; 
-} elseif ($categoriaUrl === 'todas') {
-    $categoriaSeleccionada = 'todas'; 
-    $idFiltrado = 'todas';
-} elseif ($categoriaUrl === 'bebida-sin-alcohol' || $categoriaUrl === 'sin-alcohol') {
-    $categoriaSeleccionada = 'bebida-sin-alcohol';
-    $idFiltrado = 10; 
-} else {
-    $categoriaSeleccionada = $categoriaUrl;
-    $idFiltrado = $categoriaUrl; 
-}
-
-// Traemos los datos de MySQL una sola vez
+$terminoBusqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
 $categorias = obtenerCategorias($conexion); 
-$productos = obtenerProductosPorNombreCategoria($conexion, $idFiltrado);
 
+// Evaluamos si el usuario usó el buscador o la navegación tradicional
+if (!empty($terminoBusqueda)) {
+    // Activamos un estado especial para el diseño y llamamos a la función de búsqueda
+    $categoriaSeleccionada = 'busqueda';
+    $productos = buscarProductosPorTexto($conexion, $terminoBusqueda);
+} else {
+        // Traducimos los estados para la vista y la base de datos de forma limpia
+        if ($categoriaUrl === 'inicio') {
+            $categoriaSeleccionada = 'inicio';
+            $idFiltrado = 'todas'; 
+        } elseif ($categoriaUrl === 'todas') {
+            $categoriaSeleccionada = 'todas'; 
+            $idFiltrado = 'todas';
+        } elseif ($categoriaUrl === 'bebida-sin-alcohol' || $categoriaUrl === 'sin-alcohol') {
+            $categoriaSeleccionada = 'bebida-sin-alcohol';
+            $idFiltrado = 10; 
+        } else {
+            $categoriaSeleccionada = $categoriaUrl;
+            $idFiltrado = $categoriaUrl; 
+        }
+        // Traemos los datos de MySQL una sola vez
+        $productos = obtenerProductosPorNombreCategoria($conexion, $idFiltrado);
+}
 include_once 'views/includes/tienda/head.php'; 
 include_once 'views/includes/tienda/header.php';
 ?>
@@ -57,7 +63,8 @@ include_once 'views/includes/tienda/header.php';
                 </button>
 
                 <!-- Cortina flotante con clases de Bootstrap (Se abre solo si está filtrando) -->
-                <div class="collapse <?= ($categoriaSeleccionada !== 'inicio' && $categoriaSeleccionada !== 'todas') ? 'show' : ''; ?> position-absolute start-0 w-100 bg-white shadow-lg border" id="cortinaCategorias" style="z-index: 1050; top: 100%;">
+                <!-- Cambiá la etiqueta del div colapsable por esta: -->
+                <div class="collapse <?= ($categoriaSeleccionada !== 'inicio' && $categoriaSeleccionada !== 'todas' && $categoriaSeleccionada !== 'busqueda') ? 'show' : ''; ?> position-absolute start-0 w-100 bg-white shadow-lg border" id="cortinaCategorias" style="z-index: 1050; top: 100%;">
                     <div class="list-group list-group-flush">
                         
                         <a href="index.php?categoria=todas" class="list-group-item list-group-item-action <?= $categoriaSeleccionada === 'todas' ? 'active bg-dark border-dark' : ''; ?> fw-semibold py-2.5">
@@ -125,16 +132,17 @@ include_once 'views/includes/tienda/header.php';
                 <!-- Título del Catálogo Dinámico sin guiones -->
                 <h2 class="mb-4 fw-bold text-uppercase pb-2 border-bottom text-dark" style="font-family: 'Times New Roman', serif; letter-spacing: 1px; font-size: 1.75rem;">
                     <?php 
-                        if ($categoriaSeleccionada === 'todas') {
-                            echo "Nuestro Catálogo Completo";
-                        } elseif ($categoriaSeleccionada === 'bebida-sin-alcohol') {
-                            echo "Bebidas sin alcohol";
-                        } else {
-                            echo htmlspecialchars($categoriaSeleccionada);
-                        }
-                    ?>
+                    if ($categoriaSeleccionada === 'todas') {
+                        echo "Nuestro Catálogo Completo";
+                    } elseif ($categoriaSeleccionada === 'busqueda') {
+                        echo "Resultados para: '" . htmlspecialchars($terminoBusqueda) . "'";
+                    } elseif ($categoriaSeleccionada === 'bebida-sin-alcohol') {
+                        echo "Bebidas sin alcohol";
+                    } else {
+                        echo htmlspecialchars($categoriaSeleccionada);
+                    }
+                ?>
                 </h2>
-                
                 <!-- Grilla de Tarjetas -->
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                     <?php if (!empty($productos)): ?>
@@ -145,7 +153,7 @@ include_once 'views/includes/tienda/header.php';
                         <?php endforeach; ?>
                     <?php else: ?>
                         <div class="col-12 text-center py-5">
-                            <p class="text-muted fs-5">No hay vinos disponibles en esta categoría en este momento.</p>
+                            <p class="text-muted fs-5">No se encontraron resultados.</p>
                         </div>
                     <?php endif; ?>
                 </div>
