@@ -3,6 +3,20 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Inicializamos el carrito si no existe
+if (!isset($_SESSION['carrito'])) {
+    $_SESSION['carrito'] = [];
+}
+
+
+$subtotalGeneral = 0;
+$cantidadTotalItems = 0;
+
+foreach ($_SESSION['carrito'] as $item) {
+    $subtotalGeneral += $item['precio'] * $item['cantidad'];
+    $cantidadTotalItems += $item['cantidad'];
+}
+
 // Incluimos la cabecera de la Vinoteca
 include_once '../includes/tienda/head.php';
 include_once '../includes/tienda/header.php';
@@ -14,117 +28,106 @@ include_once '../includes/tienda/header.php';
         Tu Canasta de Compras
     </h2>
 
-    <div class="row">
-        <!-- 🍷 COLUMNA 1: LISTADO DE PRODUCTOS (Ancho 8 de 12) -->
-        <div class="col-lg-8 mb-4">
-            <div class="card border-light-subtle shadow-sm rounded-0 p-3 bg-white">
-                
-                <!-- PRODUCTO 1 DE MUESTRA -->
-                <div class="row align-items-center py-3 border-bottom g-3">
-                    <!-- Imagen chica del vino -->
-                    <div class="col-3 col-md-2 text-center bg-light p-2" style="height: 100px;">
-                        <?php
-                            $nombreFoto = "producto_" . $item['idProducto'] . ".jpg"; // Aquí deberías usar el ID real del producto
-                            $imagenVino = file_exists("/../../assets/img/" . $nombreFoto) ? $nombreFoto : 'botella_generica.jpg';
-                        ?>
-                        <img src="/../../assets/img/<?= $imagenVino; ?>" class="img-fluid" alt="<?= $item['nombre']; ?>" style="max-height: 100%; object-fit: contain;">
-                    </div>
-                    <!-- Detalles del vino -->
-                    <div class="col-9 col-md-5">
-                        <span class="text-muted text-uppercase tracking-wider small d-block" style="font-size: 0.7rem;">Catena Zapata</span>
-                        <h5 class="fw-bold mb-1" style="font-family: 'Times New Roman', serif; font-size: 1.1rem;">D.V. Catena Malbec</h5>
-                        <p class="text-secondary small m-0">750ml</p>
-                    </div>
-                    <!-- Control de Cantidad (+ / -) -->
-                    <div class="col-6 col-md-3">
-                        <div class="input-group input-group-sm" style="max-width: 120px;">
-                            <button class="btn btn-outline-dark rounded-0" type="button">-</button>
-                            <input type="text" class="form-control text-center border-dark bg-white" value="1" readonly>
-                            <button class="btn btn-outline-dark rounded-0" type="button">+</button>
+    <?php if (empty($_SESSION['carrito'])): ?>
+        <div class="text-center py-5">
+            <p class="text-muted fs-5 mb-4">Tu canasta de compras está vacía.</p>
+            <a href="/ecommerce/index.php" class="btn btn-dark rounded-0 text-uppercase fw-semibold px-4 py-3" style="font-size: 0.8rem; letter-spacing: 1px;">
+                Ver Catálogo de Vinos
+            </a>
+        </div>
+    <?php else: ?>
+        <div class="row">
+            <!-- 🍷 COLUMNA 1: LISTADO DE PRODUCTOS -->
+            <div class="col-lg-8 mb-4">
+                <div class="card border-light-subtle shadow-sm rounded-0 p-3 bg-white">
+                    
+                    <?php foreach ($_SESSION['carrito'] as $idProducto => $item): ?>
+                        <!-- UNICA ESTRUCTURA DE PRODUCTO REPETIDA DINÁMICAMENTE -->
+                        <div class="row align-items-center py-3 border-bottom g-3">
+                            <!-- Imagen chica del vino -->
+                            <div class="col-3 col-md-2 text-center bg-light p-2" style="height: 100px;">
+                                <?php
+                                    $nombreFoto = "producto_" . $idProducto . ".jpg";
+                                    $rutaFisica = __DIR__ . "/../../assets/img/" . $nombreFoto;
+                                    $imagenVino = file_exists($rutaFisica) ? $nombreFoto : 'botella_generica.jpg';
+                                ?>
+                                <img src="/ecommerce/assets/img/<?= $imagenVino; ?>" class="img-fluid" alt="<?= htmlspecialchars($item['nombre']); ?>" style="max-height: 100%; object-fit: contain;">
+                            </div>
+                            
+                            <!-- Detalles del vino -->
+                            <div class="col-9 col-md-5">
+                                <span class="text-muted text-uppercase tracking-wider small d-block" style="font-size: 0.7rem;"><?= htmlspecialchars($item['bodega'] ?? 'Vinoteca'); ?></span>
+                                <h5 class="fw-bold mb-1" style="font-family: 'Times New Roman', serif; font-size: 1.1rem;"><?= htmlspecialchars($item['nombre']); ?></h5>
+                                <p class="text-secondary small m-0"><?= htmlspecialchars($item['presentacion'] ?? '750ml'); ?></p>
+                            </div>
+                            
+                            <!-- Control de Cantidad (+ / -) -->
+                            <div class="col-6 col-md-3">
+                                <div class="input-group input-group-sm" style="max-width: 120px;">
+                                    <a href="/ecommerce/controllers/tienda/carrito_actualizar.php?id=<?= $idProducto; ?>&accion=restar" class="btn btn-outline-dark rounded-0">-</a>
+                                    <input type="text" class="form-control text-center border-dark bg-white" value="<?= $item['cantidad']; ?>" readonly>
+                                    <a href="/ecommerce/controllers/tienda/carrito_actualizar.php?id=<?= $idProducto; ?>&accion=sumar" class="btn btn-outline-dark rounded-0">+</a>
+                                </div>
+                            </div>
+                            
+                            <!-- Precio y Botón Eliminar -->
+                            <div class="col-6 col-md-2 text-end">
+                                <span class="fw-bold d-block mb-2">$<?= number_format($item['precio'] * $item['cantidad'], 0, ',', '.'); ?></span>
+                                <a href="/ecommerce/controllers/tienda/carrito_eliminar.php?id=<?= $idProducto; ?>" class="text-danger text-decoration-none small">
+                                    <i class="bi bi-trash3 me-1"></i> Quitar
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    <!-- Precio y Botón Eliminar -->
-                    <div class="col-6 col-md-2 text-end">
-                        <span class="fw-bold d-block mb-2">$14.500</span>
-                        <a href="#" class="text-danger text-decoration-none small">
-                            <i class="bi bi-trash3 me-1"></i> Quitar
-                        </a>
-                    </div>
+                    <?php endforeach; ?>
+
                 </div>
 
-                <!-- PRODUCTO 2 DE MUESTRA -->
-                <div class="row align-items-center py-3 g-3">
-                    <div class="col-3 col-md-2 text-center bg-light p-2" style="height: 100px;">
-                        <img src="assets/img/producto_2.jpg" class="img-fluid" alt="Vino" style="max-height: 100%; object-fit: contain;">
-                    </div>
-                    <div class="col-9 col-md-5">
-                        <span class="text-muted text-uppercase tracking-wider small d-block" style="font-size: 0.7rem;">Rutini Wines</span>
-                        <h5 class="fw-bold mb-1" style="font-family: 'Times New Roman', serif; font-size: 1.1rem;">Rutini Cabernet Malbec</h5>
-                        <p class="text-secondary small m-0">750ml</p>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="input-group input-group-sm" style="max-width: 120px;">
-                            <button class="btn btn-outline-dark rounded-0" type="button">-</button>
-                            <input type="text" class="form-control text-center border-dark bg-white" value="2" readonly>
-                            <button class="btn btn-outline-dark rounded-0" type="button">+</button>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-2 text-end">
-                        <span class="fw-bold d-block mb-2">$36.400</span>
-                        <a href="#" class="text-danger text-decoration-none small">
-                            <i class="bi bi-trash3 me-1"></i> Quitar
-                        </a>
-                    </div>
+                <!-- Botón para seguir comprando -->
+                <div class="mt-4">
+                    <a href="/ecommerce/index.php" class="btn btn-outline-dark rounded-0 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                        <i class="bi bi-arrow-left me-2"></i> Seguir Comprando
+                    </a>
                 </div>
-
             </div>
 
-            <!-- Botón para seguir comprando -->
-            <div class="mt-4">
-                <a href="/ecommerce/index.php" class="btn btn-outline-dark rounded-0 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
-                    <i class="bi bi-arrow-left me-2"></i> Seguir Comprando
-                </a>
+            <!-- 🧾 COLUMNA 2: RESUMEN DE LA COMPRA -->
+            <div class="col-lg-4">
+                <div class="card border-light-subtle shadow-sm rounded-0 p-4 bg-white">
+                    <h4 class="fw-bold mb-4 text-uppercase pb-2 border-bottom" style="font-family: 'Times New Roman', serif; font-size: 1.25rem; letter-spacing: 0.5px;">
+                        Resumen del Pedido
+                    </h4>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Subtotal (<?= $cantidadTotalItems; ?> productos)</span>
+                        <span class="fw-semibold text-dark">$<?= number_format($subtotalGeneral, 0, ',', '.'); ?></span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">Envío</span>
+                        <span class="text-success fw-semibold">Gratis</span>
+                    </div>
+
+                    <hr class="border-secondary my-3">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="fw-bold fs-5" style="font-family: 'Times New Roman', serif;">Total</span>
+                        <span class="fw-bold fs-4 text-dark">$<?= number_format($subtotalGeneral, 0, ',', '.'); ?></span>
+                    </div>
+
+                    <!-- Botón principal de checkout -->
+                    <a href="checkout.php" class="btn btn-dark rounded-0 w-100 py-3 text-uppercase fw-semibold text-center text-decoration-none" style="font-size: 0.85rem; letter-spacing: 1px;">
+                        Iniciar Finalización de Compra
+                    </a>
+                    
+                    <p class="text-center text-muted small mt-3 m-0">
+                        <i class="bi bi-shield-check me-1"></i> Compra 100% protegida y segura
+                    </p>
+                </div>
             </div>
         </div>
-
-        <!-- 🧾 COLUMNA 2: RESUMEN DE LA COMPRA (Ancho 4 de 12) -->
-        <div class="col-lg-4">
-            <div class="card border-light-subtle shadow-sm rounded-0 p-4 bg-white">
-                <h4 class="fw-bold mb-4 text-uppercase pb-2 border-bottom" style="font-family: 'Times New Roman', serif; font-size: 1.25rem; letter-spacing: 0.5px;">
-                    Resumen del Pedido
-                </h4>
-                
-                <div class="d-flex justify-content-between mb-2">
-                    <span class="text-muted">Subtotal (3 productos)</span>
-                    <span class="fw-semibold text-dark">$50.900</span>
-                </div>
-                
-                <div class="d-flex justify-content-between mb-3">
-                    <span class="text-muted">Envío</span>
-                    <span class="text-success fw-semibold">Gratis</span>
-                </div>
-
-                <hr class="border-secondary my-3">
-
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <span class="fw-bold fs-5" style="font-family: 'Times New Roman', serif;">Total</span>
-                    <span class="fw-bold fs-4 text-dark">$50.900</span>
-                </div>
-
-                <!-- Botón principal de checkout estilo premium -->
-                <button class="btn btn-dark rounded-0 w-100 py-3 text-uppercase fw-semibold" style="font-size: 0.85rem; letter-spacing: 1px;">
-                    Iniciar Finalización de Compra
-                </button>
-                
-                <p class="text-center text-muted small mt-3 m-0">
-                    <i class="bi bi-shield-check me-1"></i> Compra 100% protegida y segura
-                </p>
-            </div>
-        </div>
-    </div>
+    <?php endif; ?>
 </main>
 
 <?php
-// Incluimos el pie de página que cierra las etiquetas
 include_once '../includes/tienda/footer.php';
 ?>
