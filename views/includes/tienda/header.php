@@ -1,10 +1,8 @@
 <?php
-// Asegurarnos de tener la sesión iniciada para leer el carrito y el usuario
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Detectamos si la página actual es el carrito
 $esPaginaCarrito = basename($_SERVER['PHP_SELF']) === 'carrito.php';
 
 $cantidadTotalCarrito = 0;
