@@ -75,6 +75,13 @@ if (isset($_SESSION['carrito'])) {
                 <input class="form-control form-control-sm rounded-0 border-0" type="search" placeholder="Buscar productos..." aria-label="Buscar">
                 <button class="btn btn-sm btn-danger rounded-0 px-3" type="submit">
                     <i class="bi bi-search"></i>
+            <form action="/ecommerce/index.php" method="GET" class="d-flex my-2 my-lg-0" role="search" style="max-width: 300px;">
+                <input type="text" name="busqueda" class="form-control rounded-0 border-0 px-3" placeholder="Buscar productos..." value="<?= isset($_GET['busqueda']) ? htmlspecialchars($_GET['busqueda']) : ''; ?>">
+        
+                <button type="submit" class="btn btn-danger rounded-0 px-3 d-flex align-items-center justify-content-center" style="background-color: #dc3545;">
+                    <svg xmlns="http://w3.org" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
                 </button>
             </form>
 

@@ -72,14 +72,13 @@ function eliminarProducto(PDO $conexion, int $idProducto){
     return $stmt->execute([ ':id' => $idProducto ]);
 }
 
-// FUNCIÓN HÍBRIDA EXCLUSIVA PARA LA TIENDA Y LAS URLS AMIGABLES
 function obtenerProductosPorNombreCategoria(PDO $conexion, $categoriaSeleccionada = 'todas') {
-    if ($categoriaSeleccionada !== 'todas' && !empty($categoriaSeleccionada)) {
+    if ($categoriaSeleccionada !== 'todas' && $categoriaSeleccionada !== 'inicio' && !empty($categoriaSeleccionada)) {
         
-        // Evaluamos si es un ID numérico (para el detalle o enlaces manuales) o texto (para el aside)
         if (is_numeric($categoriaSeleccionada)) {
             $condicion = "p.idProducto = :categoriaSeleccionada";
         } else {
+            // Comparación simple, plana y directa por texto completo en minúsculas
             $condicion = "LOWER(TRIM(c.nombre)) = :categoriaSeleccionada";
         }
 
@@ -90,7 +89,7 @@ function obtenerProductosPorNombreCategoria(PDO $conexion, $categoriaSeleccionad
                 WHERE $condicion";
                 
         $stmt = $conexion->prepare($sql);
-        $stmt->execute([':categoriaSeleccionada' => $categoriaSeleccionada]);
+        $stmt->execute([':categoriaSeleccionada' => strtolower(trim($categoriaSeleccionada))]);
     } else {
         $sql = "SELECT p.*, pr.nombre AS nombre_proveedor, c.nombre AS nombre_categoria 
                 FROM productos p 
@@ -99,6 +98,23 @@ function obtenerProductosPorNombreCategoria(PDO $conexion, $categoriaSeleccionad
         $stmt = $conexion->prepare($sql);
         $stmt->execute();
     }
+    
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function buscarProductosPorTexto(PDO $conexion, $termino) {
+    // El operador LIKE requiere los comodines % antes y después de la palabra
+    $busquedaConComodines = "%" . $termino . "%";
+    
+    $sql = "SELECT p.*, pr.nombre AS nombre_proveedor, c.nombre AS nombre_categoria 
+            FROM productos p 
+            LEFT JOIN proveedores pr ON p.idProveedor = pr.idProveedor 
+            LEFT JOIN categorias c ON p.idCategoria = c.idCategoria 
+            WHERE LOWER(p.nombre) LIKE :busqueda 
+               OR LOWER(p.marca) LIKE :busqueda 
+               OR LOWER(c.nombre) LIKE :busqueda";
+               
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute([':busqueda' => strtolower($busquedaConComodines)]);
     
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }

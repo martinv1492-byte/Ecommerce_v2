@@ -2,12 +2,12 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// 2. Si el usuario acaba de hacer clic en el "SÍ" del cartel de inicio.php
+
+// 1. Control de mayoría de edad (Tu lógica idéntica)
 if (isset($_GET['verificado']) && $_GET['verificado'] === 'si') {
-    $_SESSION['mayor_edad'] = true; // Guardamos el pase libre en la sesión
+    $_SESSION['mayor_edad'] = true; 
 }
 
-// 3. CONTROL DE ACCESO
 if (!isset($_SESSION['mayor_edad'])) {
     include_once __DIR__ . '/views/tienda/inicio.php';
     exit(); 
@@ -16,28 +16,75 @@ if (!isset($_SESSION['mayor_edad'])) {
 require_once __DIR__ . '/config/config.php'; 
 require_once __DIR__ . '/models/producto.php'; 
 
-// 🔄 CAPTURA ÚNICA E INTELIGENTE DE LA URL
+// 2. CAPTURA Y TRADUCTOR DE CATEGORÍAS (Esto soluciona los warnings de la pantalla)
 $categoriaUrl = isset($_GET['categoria']) ? strtolower(trim($_GET['categoria'])) : 'inicio';
+$terminoBusqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
 
-// Traducimos los estados para la vista y la base de datos de forma limpia
-if ($categoriaUrl === 'inicio') {
-    $categoriaSeleccionada = 'inicio';
-    $idFiltrado = 'todas'; 
-} elseif ($categoriaUrl === 'todas') {
-    $categoriaSeleccionada = 'todas'; 
-    $idFiltrado = 'todas';
-} elseif ($categoriaUrl === 'bebida-sin-alcohol' || $categoriaUrl === 'sin-alcohol') {
-    $categoriaSeleccionada = 'bebida-sin-alcohol';
-    $idFiltrado = 10; 
+if (!empty($terminoBusqueda)) {
+    $categoriaSeleccionada = 'busqueda';
+    $idFiltrado = 'todas'; // Para que traiga los productos latentes que va a filtrar el LIKE
 } else {
-    $categoriaSeleccionada = $categoriaUrl;
-    $idFiltrado = $categoriaUrl; 
+    if ($categoriaUrl === 'inicio') {
+        $categoriaSeleccionada = 'inicio';
+        $idFiltrado = 'todas'; 
+    } elseif ($categoriaUrl === 'todas') {
+        $categoriaSeleccionada = 'todas'; 
+        $idFiltrado = 'todas';
+    } elseif ($categoriaUrl === 'bebida-sin-alcohol' || $categoriaUrl === 'sin-alcohol') {
+        $categoriaSeleccionada = 'bebida-sin-alcohol';
+        $idFiltrado = 'bebida-sin-alcohol'; 
+    } else {
+        $categoriaSeleccionada = $categoriaUrl;
+        $idFiltrado = $categoriaUrl; 
+    }
 }
 
-// Traemos los datos de MySQL una sola vez
+// 3. TRAEMOS LOS DATOS INICIALES DE MYSQL
 $categorias = obtenerCategorias($conexion); 
-$productos = obtenerProductosPorNombreCategoria($conexion, $idFiltrado);
 
+// Si el usuario buscó por palabra, usamos la función del buscador. Si no, la tradicional de categoría.
+if ($categoriaSeleccionada === 'busqueda') {
+    $productos = buscarProductosPorTexto($conexion, $terminoBusqueda);
+} else {
+    $productos = obtenerProductosPorNombreCategoria($conexion, $idFiltrado);
+}
+// =========================================================================
+// =========================================================================
+// 🚀 4. RUTEADOR DE DETALLE INTELIGENTE BLINDADO (REEMPLAZÁ ESTE BLOQUE)
+// =========================================================================
+$productoUrl = isset($_GET['producto']) ? strtolower(trim($_GET['producto'])) : '';
+
+if (!empty($productoUrl)) {
+    
+    // Traemos todo el catálogo de la cava para comparar de forma segura
+    $todosLosProductos = obtenerProductosPorNombreCategoria($conexion, 'todas');
+    
+    $producto = null;
+    foreach ($todosLosProductos as $p) {
+        // 🔍 LIMPIEZA EXTREMA: Quitamos espacios dobles ocultos y espacios al inicio/final
+        $nombreLimpioBD = preg_replace('/\s+/', ' ', trim($p['nombre']));
+        $nombreFormateado = str_replace(' ', '-', strtolower($nombreLimpioBD));
+        
+        if ($nombreFormateado === $productoUrl) {
+            $producto = $p;
+            break;
+        }
+    }
+
+    if ($producto) {
+        // Si hay match, inyectamos tu vista de detalle grande y frenamos el index
+        include_once __DIR__ . '/views/tienda/producto_detalle.php';
+        exit(); 
+    } else {
+        echo "<h2 class='text-center my-5'>El producto solicitado no se encuentra disponible.</h2>";
+        exit();
+    }
+}
+// =========================================================================
+
+
+// =========================================================================
+// 5. INCLUDES DE LA CABECERA (Se cargan abajo para que ya conozcan las variables limpias)
 include_once 'views/includes/tienda/head.php'; 
 include_once 'views/includes/tienda/header.php';
 ?>
@@ -66,7 +113,8 @@ include_once 'views/includes/tienda/header.php';
                 </button>
 
                 <!-- Cortina flotante con clases de Bootstrap (Se abre solo si está filtrando) -->
-                <div class="collapse <?= ($categoriaSeleccionada !== 'inicio' && $categoriaSeleccionada !== 'todas') ? 'show' : ''; ?> position-absolute start-0 w-100 bg-white shadow-lg border" id="cortinaCategorias" style="z-index: 1050; top: 100%;">
+                <!-- Cambiá la etiqueta del div colapsable por esta: -->
+                <div class="collapse <?= ($categoriaSeleccionada !== 'inicio' && $categoriaSeleccionada !== 'todas' && $categoriaSeleccionada !== 'busqueda') ? 'show' : ''; ?> position-absolute start-0 w-100 bg-white shadow-lg border" id="cortinaCategorias" style="z-index: 1050; top: 100%;">
                     <div class="list-group list-group-flush">
                         
                         <a href="index.php?categoria=todas" class="list-group-item list-group-item-action <?= $categoriaSeleccionada === 'todas' ? 'active bg-dark border-dark' : ''; ?> fw-semibold py-2.5">
@@ -134,16 +182,17 @@ include_once 'views/includes/tienda/header.php';
                 <!-- Título del Catálogo Dinámico sin guiones -->
                 <h2 class="mb-4 fw-bold text-uppercase pb-2 border-bottom text-dark" style="font-family: 'Times New Roman', serif; letter-spacing: 1px; font-size: 1.75rem;">
                     <?php 
-                        if ($categoriaSeleccionada === 'todas') {
-                            echo "Nuestro Catálogo Completo";
-                        } elseif ($categoriaSeleccionada === 'bebida-sin-alcohol') {
-                            echo "Bebidas sin alcohol";
-                        } else {
-                            echo htmlspecialchars($categoriaSeleccionada);
-                        }
-                    ?>
+                    if ($categoriaSeleccionada === 'todas') {
+                        echo "Nuestro Catálogo Completo";
+                    } elseif ($categoriaSeleccionada === 'busqueda') {
+                        echo "Resultados para: '" . htmlspecialchars($terminoBusqueda) . "'";
+                    } elseif ($categoriaSeleccionada === 'bebida-sin-alcohol') {
+                        echo "Bebidas sin alcohol";
+                    } else {
+                        echo htmlspecialchars($categoriaSeleccionada);
+                    }
+                ?>
                 </h2>
-                
                 <!-- Grilla de Tarjetas -->
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                     <?php if (!empty($productos)): ?>
@@ -154,7 +203,7 @@ include_once 'views/includes/tienda/header.php';
                         <?php endforeach; ?>
                     <?php else: ?>
                         <div class="col-12 text-center py-5">
-                            <p class="text-muted fs-5">No hay vinos disponibles en esta categoría en este momento.</p>
+                            <p class="text-muted fs-5">No se encontraron resultados.</p>
                         </div>
                     <?php endif; ?>
                 </div>
