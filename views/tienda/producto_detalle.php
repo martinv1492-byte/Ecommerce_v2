@@ -77,9 +77,16 @@ include_once __DIR__ . '/../includes/tienda/header.php';
                     </div>
                     <!-- Botón Añadir a la Canasta Estilo Premium -->
                     <div class="col">
-                        <button type="button" class="btn btn-dark rounded-0 w-100 py-3 text-uppercase fw-bold" style="font-size: 0.85rem; letter-spacing: 1px;">
-                            Añadir a la canasta
-                        </button>
+                        <form action="/ecommerce/controllers/carrito_agregar.php" method="POST">
+
+                            <input type="hidden" name="id" value="<?= $producto['idProducto']; ?>">
+
+                            <input type="hidden" name="cantidad" value="1">
+    
+                            <button type="submit" class="btn btn-outline-dark rounded-0 w-100 py-2 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                                Añadir al carrito
+                            </button>
+                        </form>
                     </div>
 
                 </div>
