@@ -1,5 +1,11 @@
+<?php
+
+if (!isset($producto)) {
+    $producto = ['idProducto' => 0, 'nombre' => '', 'precio' => 0, 'stock' => 0, 'marca' => '', 'nombre_categoria' => ''];
+}
+?>
 <div class="card h-100 border-light-subtle shadow-sm rounded-0">
-    <!-- 1. Imagen Dinámica (Ahora con la ruta correcta de assets) -->
+    
     <div class="bg-light p-4 d-flex align-items-center justify-content-center" style="height: 280px;">
         <?php 
             // 1. Armamos el nombre que le dio el script de descarga

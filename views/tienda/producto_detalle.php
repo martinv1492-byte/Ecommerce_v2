@@ -3,6 +3,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+if (!isset($producto)) {
+    $producto = ['idProducto' => 0, 'nombre' => '', 'precio' => 0, 'stock' => 0, 'marca' => '', 'nombre_categoria' => '', 'descripcion' => ''];
+}
+
 // Incluimos la cabecera visual de tu tienda (con tus rutas de layouts)
 include_once __DIR__ . '/../includes/tienda/head.php';
 include_once __DIR__ . '/../includes/tienda/header.php';
@@ -17,8 +21,7 @@ include_once __DIR__ . '/../includes/tienda/header.php';
     </div>
 
     <div class="row g-5">
-        <!-- 🍷 COLUMNA 1: IMAGEN DEL VINO GIGANTE (Ancho 5 de 12) -->
-                <!-- 🍷 COLUMNA 1: IMAGEN REAL DE LA BASE DE DATOS (Ancho 5 de 12) -->
+        <!-- 🍷 COLUMNA 1: IMAGEN REAL DE LA BASE DE DATOS (Ancho 5 de 12) -->
         <div class="col-md-5">
             <div class="bg-light p-5 d-flex align-items-center justify-content-center border shadow-sm rounded-0" style="height: 480px;">
                 <?php 
@@ -31,6 +34,7 @@ include_once __DIR__ . '/../includes/tienda/header.php';
                 <img src="assets/img/<?= $imagenVino; ?>" class="img-fluid" alt="<?= $producto['nombre']; ?>" style="max-height: 100%; object-fit: contain;">
             </div>
         </div>
+
         <!-- 📜 COLUMNA 2: DETALLES, SELECTOR Y BOTÓN (Ancho 7 de 12) -->
         <div class="col-md-7 d-flex flex-column">
             
@@ -62,36 +66,30 @@ include_once __DIR__ . '/../includes/tienda/header.php';
             <div class="mt-auto">
                 <form action="controllers/carrito_agregar.php" method="POST" class="row g-3 align-items-center">
                     
-                    <!-- Mandamos de forma oculta el ID del producto al backend del carrito de tu compañero -->
-                    <input type="hidden" name="idProducto" value="<?= $producto['idProducto']; ?>">
+                    <!-- Mandamos de forma limpia y oculta el ID del producto -->
+                    <input type="hidden" name="id" value="<?= $producto['idProducto']; ?>">
 
                     <div class="col-auto">
                         <div class="input-group" style="max-width: 140px;">
                             <button class="btn btn-outline-dark rounded-0 px-3" type="button" onclick="var input = document.getElementById('cant'); input.value = Math.max(1, parseInt(input.value) - 1)">-</button>
                             
-                            <!-- El tope máximo ahora se limita dinámicamente con el stock real de MySQL -->
+                            <!-- El input controla la cantidad dinámica seleccionada por el usuario respetando el stock -->
                             <input type="text" id="cant" name="cantidad" class="form-control text-center border-dark bg-white fw-bold rounded-0" value="1" readonly style="font-size: 0.95rem;">
                             
                             <button class="btn btn-outline-dark rounded-0 px-3" type="button" onclick="var input = document.getElementById('cant'); input.value = Math.min(<?= $producto['stock']; ?>, parseInt(input.value) + 1)">+</button>
                         </div>
                     </div>
+                    
                     <!-- Botón Añadir a la Canasta Estilo Premium -->
                     <div class="col">
-                        <form action="/ecommerce/controllers/carrito_agregar.php" method="POST">
-
-                            <input type="hidden" name="id" value="<?= $producto['idProducto']; ?>">
-
-                            <input type="hidden" name="cantidad" value="1">
-    
-                            <button type="submit" class="btn btn-outline-dark rounded-0 w-100 py-2 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
-                                Añadir al carrito
-                            </button>
-                        </form>
+                        <button type="submit" class="btn btn-outline-dark rounded-0 w-100 py-2 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                            Añadir al carrito
+                        </button>
                     </div>
 
-                </div>
+                </form>
                 
-                <!-- Información de Stock Simulada -->
+                <!-- Información de Stock Real -->
                 <div class="mt-2 text-muted small">
                     <i class="bi bi-box-seam me-1"></i> Stock disponible: <strong class="text-dark"><?= $producto['stock']; ?> unidades</strong>
                 </div>
