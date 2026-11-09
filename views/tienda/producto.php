@@ -81,14 +81,6 @@ include_once '../includes/tienda/header.php';
                             <button class="btn btn-outline-dark rounded-0 px-3" type="button" onclick="document.getElementById('cantidad').value = Math.min(<?= $producto['stock']; ?>, parseInt(document.getElementById('cantidad').value) + 1)">+</button>
                         </div>
                     </div>
-
-                    <!-- Botón de Acción Principal -->
-                    <div class="col">
-                        <button type="submit" class="btn btn-dark rounded-0 w-100 py-3 text-uppercase fw-bold" style="font-size: 0.85rem; letter-spacing: 1px;">
-                            <i class="bi bi-basket3 me-2"></i> Añadir a la canasta
-                        </button>
-                    </div>
-
                 </form>
                 
                 <!-- Aviso sutil de Stock disponible -->
