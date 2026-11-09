@@ -32,7 +32,7 @@ if (!empty($terminoBusqueda)) {
         $idFiltrado = 'todas';
     } elseif ($categoriaUrl === 'bebida-sin-alcohol' || $categoriaUrl === 'sin-alcohol') {
         $categoriaSeleccionada = 'bebida-sin-alcohol';
-        $idFiltrado = 'bebida-sin-alcohol'; 
+        $idFiltrado = 'Bebida sin alcohol'; 
     } else {
         $categoriaSeleccionada = $categoriaUrl;
         $idFiltrado = $categoriaUrl; 
@@ -92,7 +92,7 @@ include_once 'views/includes/tienda/header.php';
     <div class="alert alert-success alert-dismissible fade show rounded-0 m-4 shadow-sm" role="alert">
         <h4 class="alert-heading fw-bold text-uppercase fs-6 mb-1">¡Compra realizada con éxito!</h4>
         <p class="mb-0 small">
-            Tu pedido <strong>#<?= htmlspecialchars($_GET['orden']); ?></strong> ha sido registrado correctamente y el stock ha sido actualizado. ¡Gracias por tu compra en la vinoteca!
+            Tu pedido <strong>#<?= htmlspecialchars($_GET['orden']); ?></strong> ha sido registrado correctamente. ¡Gracias por tu compra!
         </p>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -114,24 +114,34 @@ include_once 'views/includes/tienda/header.php';
 
                 <!-- Cortina flotante con clases de Bootstrap (Se abre solo si está filtrando) -->
                 <!-- Cambiá la etiqueta del div colapsable por esta: -->
+                <!-- 1. CORRECCIÓN DE LA VISTA: Dejamos la lógica idéntica a tu original pero limpia -->
                 <div class="collapse <?= ($categoriaSeleccionada !== 'inicio' && $categoriaSeleccionada !== 'todas' && $categoriaSeleccionada !== 'busqueda') ? 'show' : ''; ?> position-absolute start-0 w-100 bg-white shadow-lg border" id="cortinaCategorias" style="z-index: 1050; top: 100%;">
                     <div class="list-group list-group-flush">
                         
-                        <a href="index.php?categoria=todas" class="list-group-item list-group-item-action <?= $categoriaSeleccionada === 'todas' ? 'active bg-dark border-dark' : ''; ?> fw-semibold py-2.5">
+                        <a href="index.php?categoria=todas" class="list-group-item list-group-item-action <?= $categoriaSeleccionada === 'todas' ? 'active bg-dark border-dark' : ''; ?> fw-semibold py-2">
                             Ver todos los productos
                         </a>
 
                         <?php foreach ($categorias as $cat): 
-                            $slugCategoria = str_replace(' ', '-', strtolower($cat['nombre'])); 
+                            // 2. CORRECCIÓN SIN ALCOHOL: Forzamos el slug para que coincida exactamente con lo que espera tu BD
+                            $nombreCat = $cat['nombre'];
+                            
+                            // Si la categoría de la BD viene como "Bebida sin alcohol", forzamos su URL manual limpia
+                            if (strtolower(trim($nombreCat)) === 'bebida sin alcohol' || strtolower(trim($nombreCat)) === 'bebidas sin alcohol') {
+                                $slugCategoria = 'bebida-sin-alcohol';
+                            } else {
+                                $slugCategoria = str_replace(' ', '-', strtolower($nombreCat)); 
+                            }
                         ?>
                             <a href="index.php?categoria=<?= $slugCategoria; ?>" 
-                            class="list-group-item list-group-item-action <?= $categoriaSeleccionada === $slugCategoria ? 'active bg-dark border-dark' : ''; ?> py-2.5">
+                            class="list-group-item list-group-item-action <?= $categoriaSeleccionada === $slugCategoria ? 'active bg-dark border-dark' : ''; ?> py-2 fw-semibold">
                                 <?= $cat['nombre']; ?>
                             </a>
                         <?php endforeach; ?>
 
                     </div>
                 </div>
+
 
             </div>
         </aside>
@@ -194,7 +204,7 @@ include_once 'views/includes/tienda/header.php';
                 ?>
                 </h2>
                 <!-- Grilla de Tarjetas -->
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-v g-4">
                     <?php if (!empty($productos)): ?>
                         <?php foreach ($productos as $producto): ?>
                             <div class="col">

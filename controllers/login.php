@@ -24,7 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_SESSION['usuario_rol'] === 'admin') {
             header("Location: ../views/admin/productos.php"); 
         } else {
-            header("Location: ../index.php");
+            if (!empty($_SESSION['carrito'])) {
+                header("Location: ../views/tienda/checkout.php");
+            } else {
+                header("Location: ../index.php");
+            }
         }
         exit();
         

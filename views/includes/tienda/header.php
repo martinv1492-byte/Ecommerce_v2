@@ -60,14 +60,26 @@ if (isset($_SESSION['carrito'])) {
 
         <!-- Contenido colapsable (Categorías + Buscador) -->
         <div class="collapse navbar-collapse" id="menuCategorias">
-            
             <!-- Links en mayúscula hacia la izquierda -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase fw-semibold" style="font-size: 0.85rem; letter-spacing: 0.5px;">
-                <li class="nav-item"><a class="nav-link text-white me-2" href="#">Novedades</a></li>
-                <li class="nav-item"><a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=vino">Vinos</a></li>
-                <li class="nav-item"><a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=espumante">Espumantes</a></li>
-                <li class="nav-item"><a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=bebida-sin-alcohol">Sin alcohol</a></li>
-                <li class="nav-item"><a class="nav-link text-danger fw-bold" href="">Ofertas</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-white me-2" href="/ecommerce/views/tienda/proximamente.php">Novedades</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=vinos" 
+                        onclick="window.location.href=this.href;">Vinos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=espumantes" 
+                        onclick="window.location.href=this.href;">Espumantes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=bebida-sin-alcohol" 
+                    onclick="window.location.href=this.href;">Sin alcohol</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger fw-bold" href="/ecommerce/views/tienda/proximamente.php">Ofertas</a>
+                </li>
             </ul>
 
             <form action="/ecommerce/index.php" method="GET" class="d-flex my-2 my-lg-0" role="search" style="max-width: 300px;">

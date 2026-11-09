@@ -26,24 +26,43 @@ include_once '../includes/tienda/header.php';
                     
                     <div class="mb-3">
                         <label class="form-label small text-uppercase">Nombre Completo</label>
-                        <input type="text" name="nombre" class="form-control rounded-0 border-dark" required>
+                        <input type="text" name="nombre" class="form-control rounded-0 border-dark" value="<?= htmlspecialchars($_SESSION['usuario_nombre'] ?? ''); ?>" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label small text-uppercase">Correo Electrónico</label>
-                        <input type="email" name="email" class="form-control rounded-0 border-dark" required>
+                        <input type="email" name="email" class="form-control rounded-0 border-dark" value="<?= htmlspecialchars($_SESSION['usuario_email'] ?? ''); ?>" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label small text-uppercase">Dirección de Entrega</label>
-                        <input type="text" name="direccion" class="form-control rounded-0 border-dark" required>
+                        <input type="text" name="direccion" class="form-control rounded-0 border-dark" value="<?= htmlspecialchars($_SESSION['usuario_direccion'] ?? ''); ?>" required>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-uppercase">Ciudad</label>
-                            <input type="text" name="ciudad" class="form-control rounded-0 border-dark" required>
+                            <input type="text" name="ciudad" class="form-control rounded-0 border-dark" value="<?= htmlspecialchars($_SESSION['usuario_ciudad'] ?? ''); ?>" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-uppercase">Código Postal</label>
-                            <input type="text" name="cp" class="form-control rounded-0 border-dark" required>
+                            <input type="text" name="cp" class="form-control rounded-0 border-dark" value="<?= htmlspecialchars($_SESSION['usuario_cp'] ?? ''); ?>" required>
+                        </div>
+
+                        <hr class="border-secondary my-4">
+                        <h5 class="fw-bold mb-3 text-uppercase" style="font-family: 'Times New Roman', serif;">Método de Pago</h5>           
+                        
+                        <div class="mb-3">
+                            <label class="form-label small text-uppercase">Número de Tarjeta</label>
+                            <input type="text" name="tarjeta_numero" class="form-control rounded-0 border-dark" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small text-uppercase">Vencimiento</label>
+                                <input type="text" name="tarjeta_vence" class="form-control rounded-0 border-dark" placeholder="MM/AA" maxlength="5" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small text-uppercase">CVV</label>
+                                <input type="password" name="tarjeta_cvv" class="form-control rounded-0 border-dark" placeholder="123" maxlength="3" required>
+                            </div>
                         </div>
                     </div>
                 </div>

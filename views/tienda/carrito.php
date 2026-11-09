@@ -126,7 +126,7 @@ include_once '../includes/tienda/header.php';
                     <!-- Botón principal de checkout con validación de sesión limpia -->
                     <?php if (isset($_SESSION['usuario_id'])): ?>
                         <!-- Si está logueado, enviamos directo al procesador -->
-                        <form action="/ecommerce/controllers/procesar_checkout.php" method="POST">
+                        <form action="/ecommerce/views/tienda/checkout.php" method="POST">
                             <button type="submit" class="btn btn-dark rounded-0 w-100 py-3 text-uppercase fw-semibold text-center" style="font-size: 0.85rem; letter-spacing: 1px;">
                                 Iniciar Finalización de Compra
                             </button>
@@ -137,7 +137,7 @@ include_once '../includes/tienda/header.php';
                             Debes iniciar sesión para finalizar tu compra.
                         </div>
                         <div class="d-flex gap-2">
-                            <a href="/ecommerce/login.php" class="btn btn-dark rounded-0 w-50 py-2 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+                            <a href="/ecommerce/views/tienda/iniciosesion.php" class="btn btn-dark rounded-0 w-50 py-2 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
                                 Iniciar Sesión
                             </a>
                             <a href="/ecommerce/views/tienda/registro.php" class="btn btn-outline-dark rounded-0 w-50 py-2 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
