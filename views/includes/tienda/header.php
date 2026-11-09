@@ -31,7 +31,7 @@ if (isset($_SESSION['carrito'])) {
                     Salir
                 </a>
             <?php else: ?>
-                <a href="/ecommerce/login.php" class="text-dark text-decoration-none small fw-semibold">Iniciar Sesión</a>
+                <a href="/ecommerce/tienda/iniciosesion.php" class="text-dark text-decoration-none small fw-semibold">Iniciar Sesión</a>
                 <a href="/ecommerce/views/tienda/registro.php" class="text-muted text-decoration-none small d-none d-sm-inline">Registrarse aquí</a>
             <?php endif; ?>
 
