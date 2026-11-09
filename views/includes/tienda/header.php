@@ -70,11 +70,6 @@ if (isset($_SESSION['carrito'])) {
                 <li class="nav-item"><a class="nav-link text-danger fw-bold" href="">Ofertas</a></li>
             </ul>
 
-            <!-- Buscador a la derecha integrado en la barra negra -->
-            <form class="d-flex my-2 my-lg-0" role="search" style="max-width: 300px;">
-                <input class="form-control form-control-sm rounded-0 border-0" type="search" placeholder="Buscar productos..." aria-label="Buscar">
-                <button class="btn btn-sm btn-danger rounded-0 px-3" type="submit">
-                    <i class="bi bi-search"></i>
             <form action="/ecommerce/index.php" method="GET" class="d-flex my-2 my-lg-0" role="search" style="max-width: 300px;">
                 <input type="text" name="busqueda" class="form-control rounded-0 border-0 px-3" placeholder="Buscar productos..." value="<?= isset($_GET['busqueda']) ? htmlspecialchars($_GET['busqueda']) : ''; ?>">
         

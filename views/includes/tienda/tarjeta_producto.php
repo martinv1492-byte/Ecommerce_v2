@@ -41,7 +41,6 @@
         <div class="mt-auto mb-3">
             <span class="fs-5 fw-bold text-dark">$<?= number_format($producto['precio'], 2, ',', '.'); ?></span>
         </div>
-<<<<<<< HEAD
 
         <form action="/ecommerce/controllers/carrito_agregar.php" method="POST">
 
@@ -50,10 +49,8 @@
     <input type="hidden" name="cantidad" value="1">
     
     <button type="submit" class="btn btn-outline-dark rounded-0 w-100 py-2 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
-        Añadir a la canasta
+        Añadir al carrito
     </button>
 </form>
-=======
->>>>>>> origin/feature/backend-detalle-producto
     </div>
 </div>
