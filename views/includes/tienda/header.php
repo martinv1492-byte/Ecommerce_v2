@@ -66,11 +66,11 @@ if (isset($_SESSION['carrito'])) {
                     <a class="nav-link text-white me-2" href="/ecommerce/views/tienda/proximamente.php">Novedades</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=vinos" 
+                    <a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=vino" 
                         onclick="window.location.href=this.href;">Vinos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=espumantes" 
+                    <a class="nav-link text-white-50 me-2" href="/ecommerce/index.php?categoria=espumante" 
                         onclick="window.location.href=this.href;">Espumantes</a>
                 </li>
                 <li class="nav-item">
