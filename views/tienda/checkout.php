@@ -46,24 +46,7 @@ include_once '../includes/tienda/header.php';
                             <input type="text" name="cp" class="form-control rounded-0 border-dark" value="<?= htmlspecialchars($_SESSION['usuario_cp'] ?? ''); ?>" required>
                         </div>
 
-                        <hr class="border-secondary my-4">
-                        <h5 class="fw-bold mb-3 text-uppercase" style="font-family: 'Times New Roman', serif;">Método de Pago</h5>           
                         
-                        <div class="mb-3">
-                            <label class="form-label small text-uppercase">Número de Tarjeta</label>
-                            <input type="text" name="tarjeta_numero" class="form-control rounded-0 border-dark" placeholder="0000 0000 0000 0000" maxlength="19" required>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label small text-uppercase">Vencimiento</label>
-                                <input type="text" name="tarjeta_vence" class="form-control rounded-0 border-dark" placeholder="MM/AA" maxlength="5" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label small text-uppercase">CVV</label>
-                                <input type="password" name="tarjeta_cvv" class="form-control rounded-0 border-dark" placeholder="123" maxlength="3" required>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
