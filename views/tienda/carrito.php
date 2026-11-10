@@ -3,12 +3,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Inicializamos el carrito si no existe
 if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
 }
 
-// Variables para los totales
 $subtotalGeneral = 0;
 $cantidadTotalItems = 0;
 
@@ -17,13 +15,13 @@ foreach ($_SESSION['carrito'] as $item) {
     $cantidadTotalItems += $item['cantidad'];
 }
 
-// Incluimos la cabecera de la Vinoteca
+
 include_once '../includes/tienda/head.php';
 include_once '../includes/tienda/header.php';
 ?>
 
 <main class="container my-5" style="min-height: 65vh;">
-    <!-- Alertas de error por stock insuficiente -->
+
     <?php if (isset($_GET['error']) && $_GET['error'] === 'stock_insuficiente'): ?>
         <div class="alert alert-danger rounded-0 alert-dismissible fade show mb-4" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i> 
@@ -32,7 +30,7 @@ include_once '../includes/tienda/header.php';
         </div>
     <?php endif; ?>
 
-    <!-- Título de la sección -->
+
     <h2 class="mb-5 fw-bold text-uppercase pb-2 border-bottom" style="font-family: 'Times New Roman', serif; letter-spacing: 1px;">
         Tu Canasta de Compras
     </h2>
@@ -46,14 +44,14 @@ include_once '../includes/tienda/header.php';
         </div>
     <?php else: ?>
         <div class="row">
-            <!-- 🍷 COLUMNA 1: LISTADO DE PRODUCTOS -->
+
             <div class="col-lg-8 mb-4">
                 <div class="card border-light-subtle shadow-sm rounded-0 p-3 bg-white">
                     
                     <?php foreach ($_SESSION['carrito'] as $idProducto => $item): ?>
-                        <!-- UNICA ESTRUCTURA DE PRODUCTO REPETIDA DINÁMICAMENTE -->
+
                         <div class="row align-items-center py-3 border-bottom g-3">
-                            <!-- Imagen chica del vino -->
+
                             <div class="col-3 col-md-2 text-center bg-light p-2" style="height: 100px;">
                                 <?php
                                     $nombreFoto = "producto_" . $idProducto . ".jpg";
@@ -63,14 +61,14 @@ include_once '../includes/tienda/header.php';
                                 <img src="/ecommerce/assets/img/<?= $imagenVino; ?>" class="img-fluid" alt="<?= htmlspecialchars($item['nombre']); ?>" style="max-height: 100%; object-fit: contain;">
                             </div>
                             
-                            <!-- Detalles del vino -->
+
                             <div class="col-9 col-md-5">
                                 <span class="text-muted text-uppercase tracking-wider small d-block" style="font-size: 0.7rem;"><?= htmlspecialchars($item['bodega'] ?? 'Vinoteca'); ?></span>
                                 <h5 class="fw-bold mb-1" style="font-family: 'Times New Roman', serif; font-size: 1.1rem;"><?= htmlspecialchars($item['nombre']); ?></h5>
                                 <p class="text-secondary small m-0"><?= htmlspecialchars($item['presentacion'] ?? '750ml'); ?></p>
                             </div>
                             
-                            <!-- Control de Cantidad (+ / -) -->
+
                             <div class="col-6 col-md-3">
                                 <div class="input-group input-group-sm" style="max-width: 120px;">
                                     <a href="/ecommerce/controllers/carrito_actualizar.php?id=<?= $idProducto; ?>&accion=restar" class="btn btn-outline-dark rounded-0">-</a>
@@ -79,7 +77,6 @@ include_once '../includes/tienda/header.php';
                                 </div>
                             </div>
                             
-                            <!-- Precio y Botón Eliminar -->
                             <div class="col-6 col-md-2 text-end">
                                 <span class="fw-bold d-block mb-2">$<?= number_format($item['precio'] * $item['cantidad'], 0, ',', '.'); ?></span>
                                 <a href="/ecommerce/controllers/carrito_eliminar.php?id=<?= $idProducto; ?>" class="text-danger text-decoration-none small">
@@ -91,7 +88,6 @@ include_once '../includes/tienda/header.php';
 
                 </div>
 
-                <!-- Botón para seguir comprando -->
                 <div class="mt-4">
                     <a href="/ecommerce/index.php" class="btn btn-outline-dark rounded-0 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
                         <i class="bi bi-arrow-left me-2"></i> Seguir Comprando
@@ -99,7 +95,6 @@ include_once '../includes/tienda/header.php';
                 </div>
             </div>
 
-            <!-- 🧾 COLUMNA 2: RESUMEN DE LA COMPRA -->
             <div class="col-lg-4">
                 <div class="card border-light-subtle shadow-sm rounded-0 p-4 bg-white">
                     <h4 class="fw-bold mb-4 text-uppercase pb-2 border-bottom" style="font-family: 'Times New Roman', serif; font-size: 1.25rem; letter-spacing: 0.5px;">
@@ -123,16 +118,16 @@ include_once '../includes/tienda/header.php';
                         <span class="fw-bold fs-4 text-dark">$<?= number_format($subtotalGeneral, 0, ',', '.'); ?></span>
                     </div>
 
-                    <!-- Botón principal de checkout con validación de sesión limpia -->
+
                     <?php if (isset($_SESSION['usuario_id'])): ?>
-                        <!-- Si está logueado, enviamos directo al procesador -->
+
                         <form action="/ecommerce/views/tienda/checkout.php" method="POST">
                             <button type="submit" class="btn btn-dark rounded-0 w-100 py-3 text-uppercase fw-semibold text-center" style="font-size: 0.85rem; letter-spacing: 1px;">
                                 Iniciar Finalización de Compra
                             </button>
                         </form>
                     <?php else: ?>
-                        <!-- Si NO está logueado, avisamos y mostramos botones de acceso -->
+
                         <div class="alert alert-warning text-center small rounded-0 mb-3 py-2" role="alert">
                             Debes iniciar sesión para finalizar tu compra.
                         </div>

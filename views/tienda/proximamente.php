@@ -2,14 +2,13 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Ajusta las rutas de tus includes según tu estructura de carpetas
 include_once '../includes/tienda/head.php';
 include_once '../includes/tienda/header.php';
 ?>
 
 <main class="container d-flex flex-column align-items-center justify-content-center text-center" style="min-height: 65vh;">
     <div class="p-5 border border-light-subtle shadow-sm bg-white rounded-0" style="max-width: 600px;">
-        <!-- Ícono de reloj de arena o copa de Bootstrap Icons -->
+        
         <div class="mb-4 text-dark fs-1">
             <i class="bi bi-hourglass-split animate-pulse"></i>
         </div>
@@ -29,7 +28,7 @@ include_once '../includes/tienda/header.php';
 </main>
 
 <style>
-    /* Una animación sutil para que el ícono tenga dinamismo */
+    
     @keyframes pulse {
         0% { opacity: 0.6; }
         50% { opacity: 1; }

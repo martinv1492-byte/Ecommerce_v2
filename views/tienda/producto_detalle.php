@@ -7,13 +7,12 @@ if (!isset($producto)) {
     $producto = ['idProducto' => 0, 'nombre' => '', 'precio' => 0, 'stock' => 0, 'marca' => '', 'nombre_categoria' => '', 'descripcion' => ''];
 }
 
-// Incluimos la cabecera visual de tu tienda (con tus rutas de layouts)
 include_once __DIR__ . '/../includes/tienda/head.php';
 include_once __DIR__ . '/../includes/tienda/header.php';
 ?>
 
 <main class="container my-5 py-4" style="min-height: 65vh;">
-    <!-- Botón sutil para volver -->
+    
     <div class="mb-5">
         <a href="/ecommerce/index.php?categoria=todas" class="text-dark text-decoration-none small fw-semibold text-uppercase tracking-wider">
             <i class="bi bi-arrow-left me-1"></i> ← Volver al Catálogo
@@ -21,21 +20,19 @@ include_once __DIR__ . '/../includes/tienda/header.php';
     </div>
 
     <div class="row g-5">
-        <!-- 🍷 COLUMNA 1: IMAGEN REAL DE LA BASE DE DATOS (Ancho 5 de 12) -->
+        
         <div class="col-md-5">
             <div class="bg-light p-5 d-flex align-items-center justify-content-center border shadow-sm rounded-0" style="height: 480px;">
                 <?php 
-                    // Armamos el nombre dinámico basado en el ID del vino que viene de la base de datos
                     $nombreFoto = "producto_" . $producto['idProducto'] . ".jpg";
                     
-                    // Como este archivo se va a renderizar "adentro" de index.php, la ruta empieza directo en assets/
+                    
                     $imagenVino = file_exists("assets/img/" . $nombreFoto) ? $nombreFoto : 'botella_generica.jpg'; 
                 ?>
                 <img src="assets/img/<?= $imagenVino; ?>" class="img-fluid" alt="<?= $producto['nombre']; ?>" style="max-height: 100%; object-fit: contain;">
             </div>
         </div>
 
-        <!-- 📜 COLUMNA 2: DETALLES, SELECTOR Y BOTÓN (Ancho 7 de 12) -->
         <div class="col-md-7 d-flex flex-column">
             
             <span class="text-muted text-uppercase tracking-widest fw-bold mb-2" style="font-size: 0.8rem; letter-spacing: 1.5px;">
@@ -62,25 +59,21 @@ include_once __DIR__ . '/../includes/tienda/header.php';
                 </p>
             </div>
 
-            <!-- 🛒 CONTROLES DE COMPRA CONECTADOS AL STOCK REAL -->
             <div class="mt-auto">
                 <form action="controllers/carrito_agregar.php" method="POST" class="row g-3 align-items-center">
                     
-                    <!-- Mandamos de forma limpia y oculta el ID del producto -->
                     <input type="hidden" name="id" value="<?= $producto['idProducto']; ?>">
 
                     <div class="col-auto">
                         <div class="input-group" style="max-width: 140px;">
                             <button class="btn btn-outline-dark rounded-0 px-3" type="button" onclick="var input = document.getElementById('cant'); input.value = Math.max(1, parseInt(input.value) - 1)">-</button>
                             
-                            <!-- El input controla la cantidad dinámica seleccionada por el usuario respetando el stock -->
                             <input type="text" id="cant" name="cantidad" class="form-control text-center border-dark bg-white fw-bold rounded-0" value="1" readonly style="font-size: 0.95rem;">
                             
                             <button class="btn btn-outline-dark rounded-0 px-3" type="button" onclick="var input = document.getElementById('cant'); input.value = Math.min(<?= $producto['stock']; ?>, parseInt(input.value) + 1)">+</button>
                         </div>
                     </div>
                     
-                    <!-- Botón Añadir a la Canasta Estilo Premium -->
                     <div class="col">
                         <button type="submit" class="btn btn-outline-dark rounded-0 w-100 py-2 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
                             Añadir al carrito
@@ -89,7 +82,6 @@ include_once __DIR__ . '/../includes/tienda/header.php';
 
                 </form>
                 
-                <!-- Información de Stock Real -->
                 <div class="mt-2 text-muted small">
                     <i class="bi bi-box-seam me-1"></i> Stock disponible: <strong class="text-dark"><?= $producto['stock']; ?> unidades</strong>
                 </div>

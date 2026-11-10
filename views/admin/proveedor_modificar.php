@@ -28,7 +28,7 @@ if (!$proveedor) {
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
+            
             <div class="col-md-3 col-lg-2 px-0 bg-dark">
                 <?php include __DIR__ . '/../includes/admin/sidebar.php'; ?>
             </div>

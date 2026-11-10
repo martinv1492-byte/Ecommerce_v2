@@ -24,7 +24,6 @@ if (isset($_SESSION['carrito'])) {
 
         <div class="d-flex align-items-center gap-3" style="justify-content: flex-end;">
             
-            <!-- 👤 ZONA DINÁMICA DE USUARIO / SESIÓN -->
             <?php if (isset($_SESSION['usuario_id'])): ?>
                 <span class="text-muted small d-none d-md-inline">Hola, <strong><?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Usuario'); ?></strong></span>
                 <a href="/ecommerce/controllers/logout.php" class="btn btn-outline-danger btn-sm rounded-0 text-uppercase fw-semibold" style="font-size: 0.7rem;">
@@ -35,7 +34,6 @@ if (isset($_SESSION['carrito'])) {
                 <a href="/ecommerce/views/tienda/registro.php" class="text-muted text-decoration-none small d-none d-sm-inline">Registrarse aquí</a>
             <?php endif; ?>
 
-            <!-- 🛒 ICONO DE CARRITO -->
             <?php if (!$esPaginaCarrito): ?>
                 <a href="/ecommerce/views/tienda/carrito.php" class="text-dark position-relative text-decoration-none ms-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-basket3 me-1" viewBox="0 0 16 16" style="vertical-align: middle;">
@@ -53,14 +51,13 @@ if (isset($_SESSION['carrito'])) {
 </div>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-1">
     <div class="container">
-        <!-- Botón móvil para colapsar la barra negra en celulares -->
+        
         <button class="navbar-toggler my-1" type="button" data-bs-toggle="collapse" data-bs-target="#menuCategorias">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Contenido colapsable (Categorías + Buscador) -->
         <div class="collapse navbar-collapse" id="menuCategorias">
-            <!-- Links en mayúscula hacia la izquierda -->
+            
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase fw-semibold" style="font-size: 0.85rem; letter-spacing: 0.5px;">
                 <li class="nav-item">
                     <a class="nav-link text-white me-2" href="/ecommerce/views/tienda/proximamente.php">Novedades</a>

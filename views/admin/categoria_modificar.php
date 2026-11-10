@@ -1,10 +1,9 @@
 <?php 
 require_once __DIR__ . '/../includes/admin/proteger.php';
 require_once __DIR__ . '/../../config/config.php';
-// Asegúrate de incluir tu modelo de proveedor para poder buscar el proveedor por ID
+
 require_once __DIR__ . '/../../models/categoria.php';
 
-// Verificamos que llegue un ID válido por GET
 $idCategoria = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 if ($idCategoria <= 0) {
@@ -30,7 +29,7 @@ if (!$categoria) {
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
+            
             <div class="col-md-3 col-lg-2 px-0 bg-dark">
                 <?php include __DIR__ . '/../includes/admin/sidebar.php'; ?>
             </div>
@@ -39,7 +38,7 @@ if (!$categoria) {
                 <h1 class="mb-4">Modificar Categoria</h1>
 
                 <form action="../../controllers/admin/categoria_modificar.php" method="POST" class="bg-light p-4 rounded border shadow-sm">
-                    <!-- Campo oculto para enviar el ID indispensable para saber a quién modificar -->
+                    
                     <input type="hidden" name="idCategoria" value="<?php echo $categoria['idCategoria']; ?>">
 
                     <div class="mb-3">

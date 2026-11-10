@@ -17,15 +17,12 @@ $categorias = obtenerCategorias($conexion);
 </head>
 <body class="bg-light">
 
-<!-- Contenedor principal con Flexbox puro sin columnas forzadas -->
 <div class="d-flex" style="min-height: 100vh;">
     
-    <!-- Sidebar fijo a la izquierda -->
     <div class="bg-dark flex-shrink-0">
         <?php include __DIR__ . '/../includes/admin/sidebar.php'; ?>
     </div>
 
-    <!-- Contenido principal que ocupa todo el ancho restante -->
     <div class="flex-grow-1 p-4 overflow-auto">
         
         <?php if (isset($_GET['status']) && $_GET['status'] === 'success'): ?>

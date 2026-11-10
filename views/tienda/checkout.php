@@ -19,7 +19,7 @@ include_once '../includes/tienda/header.php';
 
     <form action="/ecommerce/controllers/procesar_checkout.php" method="POST">
         <div class="row">
-            <!-- Datos de Envío -->
+            
             <div class="col-lg-7 mb-4">
                 <div class="card border-light-subtle shadow-sm rounded-0 p-4 bg-white">
                     <h5 class="fw-bold mb-3 text-uppercase" style="font-family: 'Times New Roman', serif;">Datos de Envío y Contacto</h5>
@@ -51,7 +51,7 @@ include_once '../includes/tienda/header.php';
                 </div>
             </div>
 
-            <!-- Resumen y Confirmación -->
+            
             <div class="col-lg-5">
                 <div class="card border-light-subtle shadow-sm rounded-0 p-4 bg-white">
                     <h5 class="fw-bold mb-3 text-uppercase" style="font-family: 'Times New Roman', serif;">Tu Pedido</h5>

@@ -2,18 +2,14 @@
 require_once '../../config/config.php';
 require_once '../../models/producto.php';
 
-// 1. Obtener el ID enviado por la URL
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-// 2. Verificar que el ID sea válido
 if ($id <= 0) {
     exit('Error: ID de producto no válido.');
 }
 
-// 3. Buscar el producto en la base de datos
 $producto = obtenerProductoPorId($conexion, $id);
 
-// 4. Verificar que el producto exista
 if (!$producto) {
     exit('Error: el producto no existe.');
 }

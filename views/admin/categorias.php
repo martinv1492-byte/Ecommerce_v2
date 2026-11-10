@@ -22,7 +22,6 @@ $categorias = obtenerCategorias($conexion);
                 <?php include __DIR__ . '/../includes/admin/sidebar.php'; ?>
             </div>
             
-            <!-- Columna del Contenido Principal -->
             <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4 py-4">
 
                 <?php if (isset($_GET['status'])): ?>
