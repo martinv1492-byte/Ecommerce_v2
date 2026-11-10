@@ -14,36 +14,36 @@ $paginaActual = basename($_SERVER['PHP_SELF']);
     <ul class="nav nav-pills flex-column mb-auto">
         
         <li class="nav-item mb-1">
-            <a href="productos.php" class="nav-link text-white <?php echo ($paginaActual == 'productos.php') ? 'active bg-primary' : ''; ?>">
+            <a href="/ecommerce/views/admin/productos.php" class="nav-link text-white <?php echo ($paginaActual == 'productos.php') ? 'active bg-primary' : ''; ?>">
                 📦 Productos
             </a>
         </li>
         <li class="nav-item ms-3 mb-2">
-            <a href="producto_nuevo.php" class="nav-link text-white-50 small <?php echo ($paginaActual == 'producto_nuevo.php') ? 'text-white fw-bold' : ''; ?>">
+            <a href="/ecommerce/views/admin/producto_nuevo.php" class="nav-link text-white-50 small <?php echo ($paginaActual == 'producto_nuevo.php') ? 'text-white fw-bold' : ''; ?>">
                 + Nuevo Producto
             </a>
         </li>
 
         
         <li class="nav-item mb-1">
-            <a href="categorias.php" class="nav-link text-white <?php echo ($paginaActual == 'categorias.php') ? 'active bg-primary' : ''; ?>">
+            <a href="/ecommerce/views/admin/categorias.php" class="nav-link text-white <?php echo ($paginaActual == 'categorias.php') ? 'active bg-primary' : ''; ?>">
                 📂 Categorías
             </a>
         </li>
         <li class="nav-item ms-3 mb-2">
-            <a href="categoria_nueva.php" class="nav-link text-white-50 small <?php echo ($paginaActual == 'categoria_nueva.php') ? 'text-white fw-bold' : ''; ?>">
+            <a href="/ecommerce/views/admin/categoria_nueva.php" class="nav-link text-white-50 small <?php echo ($paginaActual == 'categoria_nueva.php') ? 'text-white fw-bold' : ''; ?>">
                 + Nueva Categoría
             </a>
         </li>
 
         
         <li class="nav-item mb-1">
-            <a href="proveedores.php" class="nav-link text-white <?php echo ($paginaActual == 'proveedores.php') ? 'active bg-primary' : ''; ?>">
+            <a href="/ecommerce/views/admin/proveedores.php" class="nav-link text-white <?php echo ($paginaActual == 'proveedores.php') ? 'active bg-primary' : ''; ?>">
                 🏢 Proveedores
             </a>
         </li>
         <li class="nav-item ms-3 mb-2">
-            <a href="proveedor_nuevo.php" class="nav-link text-white-50 small <?php echo ($paginaActual == 'proveedor_nuevo.php') ? 'text-white fw-bold' : ''; ?>">
+            <a href="/ecommerce/views/admin/proveedor_nuevo.php" class="nav-link text-white-50 small <?php echo ($paginaActual == 'proveedor_nuevo.php') ? 'text-white fw-bold' : ''; ?>">
                 + Nuevo Proveedor
             </a>
         </li>
