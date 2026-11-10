@@ -59,30 +59,37 @@ include_once __DIR__ . '/../includes/tienda/header.php';
                 </p>
             </div>
 
-            <div class="mt-auto">
-                <form action="controllers/carrito_agregar.php" method="POST" class="row g-3 align-items-center">
-                    
-                    <input type="hidden" name="id" value="<?= $producto['idProducto']; ?>">
+<div class="mt-auto">
+                <?php if ($producto['stock'] > 0): ?>
+                    <form action="controllers/carrito_agregar.php" method="POST" class="row g-3 align-items-center">
+                        
+                        <input type="hidden" name="id" value="<?= $producto['idProducto']; ?>">
 
-                    <div class="col-auto">
-                        <div class="input-group" style="max-width: 140px;">
-                            <button class="btn btn-outline-dark rounded-0 px-3" type="button" onclick="var input = document.getElementById('cant'); input.value = Math.max(1, parseInt(input.value) - 1)">-</button>
-                            
-                            <input type="text" id="cant" name="cantidad" class="form-control text-center border-dark bg-white fw-bold rounded-0" value="1" readonly style="font-size: 0.95rem;">
-                            
-                            <button class="btn btn-outline-dark rounded-0 px-3" type="button" onclick="var input = document.getElementById('cant'); input.value = Math.min(<?= $producto['stock']; ?>, parseInt(input.value) + 1)">+</button>
+                        <div class="col-auto">
+                            <div class="input-group" style="max-width: 140px;">
+                                <button class="btn btn-outline-dark rounded-0 px-3" type="button" onclick="var input = document.getElementById('cant'); input.value = Math.max(1, parseInt(input.value) - 1)">-</button>
+                                
+                                <input type="text" id="cant" name="cantidad" class="form-control text-center border-dark bg-white fw-bold rounded-0" value="1" readonly style="font-size: 0.95rem;">
+                                
+                                <button class="btn btn-outline-dark rounded-0 px-3" type="button" onclick="var input = document.getElementById('cant'); input.value = Math.min(<?= $producto['stock']; ?>, parseInt(input.value) + 1)">+</button>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="col">
-                        <button type="submit" class="btn btn-outline-dark rounded-0 w-100 py-2 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
-                            Añadir al carrito
-                        </button>
-                    </div>
+                        
+                        <div class="col">
+                            <button type="submit" class="btn btn-dark rounded-0 w-100 py-2 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                                <i class="bi bi-bag-plus me-1"></i> Añadir al carrito
+                            </button>
+                        </div>
 
-                </form>
+                    </form>
+                <?php else: ?>
+                    
+                    <div class="alert alert-secondary rounded-0 text-uppercase text-center py-3 mb-2" role="alert" style="font-size: 0.8rem; letter-spacing: 1px;">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> Producto Agotado Temporalmente
+                    </div>
+                <?php endif; ?>
                 
-                <div class="mt-2 text-muted small">
+                <div class="mt-3 text-muted small">
                     <i class="bi bi-box-seam me-1"></i> Stock disponible: <strong class="text-dark"><?= $producto['stock']; ?> unidades</strong>
                 </div>
             </div>
