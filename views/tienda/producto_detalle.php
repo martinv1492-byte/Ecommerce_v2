@@ -3,8 +3,28 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($producto)) {
-    $producto = ['idProducto' => 0, 'nombre' => '', 'precio' => 0, 'stock' => 0, 'marca' => '', 'nombre_categoria' => '', 'descripcion' => ''];
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/producto.php';
+
+$idProducto = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+
+$producto = null;
+if ($idProducto > 0) {
+    $producto = obtenerProductoPorId($conexion, $idProducto);
+}
+
+
+if (!$producto) {
+    $producto = [
+        'idProducto' => 0, 
+        'nombre' => 'Producto no encontrado', 
+        'precio' => 0, 
+        'stock' => 0, 
+        'marca' => '', 
+        'nombre_categoria' => '', 
+        'descripcion' => 'Lo sentimos, el producto solicitado no existe o ya no está disponible.'
+    ];
 }
 
 include_once __DIR__ . '/../includes/tienda/head.php';
@@ -26,25 +46,25 @@ include_once __DIR__ . '/../includes/tienda/header.php';
                 <?php 
                     $nombreFoto = "producto_" . $producto['idProducto'] . ".jpg";
                     
-                    
-                    $imagenVino = file_exists("assets/img/" . $nombreFoto) ? $nombreFoto : 'botella_generica.jpg'; 
+                    $rutaFisicaImg = __DIR__ . "/../../assets/img/" . $nombreFoto;
+                    $imagenVino = file_exists($rutaFisicaImg) ? $nombreFoto : 'botella_generica.jpg'; 
                 ?>
-                <img src="assets/img/<?= $imagenVino; ?>" class="img-fluid" alt="<?= $producto['nombre']; ?>" style="max-height: 100%; object-fit: contain;">
+                <img src="/ecommerce/assets/img/<?= $imagenVino; ?>" class="img-fluid" alt="<?= htmlspecialchars($producto['nombre']); ?>" style="max-height: 100%; object-fit: contain;">
             </div>
         </div>
 
         <div class="col-md-7 d-flex flex-column">
             
             <span class="text-muted text-uppercase tracking-widest fw-bold mb-2" style="font-size: 0.8rem; letter-spacing: 1.5px;">
-                <?= $producto['marca']; ?>
+                <?= htmlspecialchars($producto['marca']); ?>
             </span>
             
             <h1 class="fw-bold mb-3 text-dark" style="font-family: 'Times New Roman', serif; font-size: 2.6rem; letter-spacing: 0.5px;">
-                <?= $producto['nombre']; ?>
+                <?= htmlspecialchars($producto['nombre']); ?>
             </h1>
             
             <span class="badge bg-dark rounded-0 align-self-start px-3 py-2 text-uppercase mb-4" style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                <?= $producto['nombre_categoria']; ?>
+                <?= htmlspecialchars($producto['nombre_categoria'] ?? 'Vinoteca'); ?>
             </span>
 
             <div class="mb-4 py-2 border-top border-bottom border-light-subtle">
@@ -55,13 +75,13 @@ include_once __DIR__ . '/../includes/tienda/header.php';
             <div class="mb-5">
                 <h6 class="text-uppercase fw-bold mb-2" style="font-family: 'Times New Roman', serif; font-size: 0.9rem; letter-spacing: 0.5px;">Notas de Cata</h6>
                 <p class="text-secondary lh-base">
-                    <?= $producto['descripcion']; ?>
+                    <?= htmlspecialchars($producto['descripcion']); ?>
                 </p>
             </div>
 
-<div class="mt-auto">
+            <div class="mt-auto">
                 <?php if ($producto['stock'] > 0): ?>
-                    <form action="controllers/carrito_agregar.php" method="POST" class="row g-3 align-items-center">
+                    <form action="/ecommerce/controllers/carrito_agregar.php" method="POST" class="row g-3 align-items-center">
                         
                         <input type="hidden" name="id" value="<?= $producto['idProducto']; ?>">
 

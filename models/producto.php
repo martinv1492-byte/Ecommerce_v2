@@ -110,9 +110,9 @@ function buscarProductosPorTexto(PDO $conexion, $termino) {
             LEFT JOIN proveedores pr ON p.idProveedor = pr.idProveedor 
             LEFT JOIN categorias c ON p.idCategoria = c.idCategoria 
             WHERE LOWER(p.nombre) LIKE :busqueda 
-               OR LOWER(p.marca) LIKE :busqueda 
-               OR LOWER(c.nombre) LIKE :busqueda";
-               
+                OR LOWER(p.marca) LIKE :busqueda 
+                OR LOWER(c.nombre) LIKE :busqueda";
+
     $stmt = $conexion->prepare($sql);
     $stmt->execute([':busqueda' => strtolower($busquedaConComodines)]);
     
