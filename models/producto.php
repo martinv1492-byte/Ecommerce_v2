@@ -78,7 +78,7 @@ function obtenerProductosPorNombreCategoria(PDO $conexion, $categoriaSeleccionad
         if (is_numeric($categoriaSeleccionada)) {
             $condicion = "p.idProducto = :categoriaSeleccionada";
         } else {
-            // Comparación simple, plana y directa por texto completo en minúsculas
+            
             $condicion = "LOWER(TRIM(c.nombre)) = :categoriaSeleccionada";
         }
 
@@ -102,7 +102,7 @@ function obtenerProductosPorNombreCategoria(PDO $conexion, $categoriaSeleccionad
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 function buscarProductosPorTexto(PDO $conexion, $termino) {
-    // El operador LIKE requiere los comodines % antes y después de la palabra
+    
     $busquedaConComodines = "%" . $termino . "%";
     
     $sql = "SELECT p.*, pr.nombre AS nombre_proveedor, c.nombre AS nombre_categoria 

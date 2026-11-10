@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $razonSocial = trim($_POST['razonSocial'] ?? '');
 
     if (!empty($nombre) && !empty($cuit)) {
-        // Empaquetamos los datos para enviarlos a la función del modelo
+        
         $datos = [
             ':nombre' => $nombre,
             ':cuit' => $cuit,
@@ -16,16 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
 
         if (crearProveedor($conexion, $datos)) {
-            // Éxito al guardar
+            
             header("Location: /ecommerce/views/admin/productos.php?status=success");
             exit();
         } else {
-            // Error en la inserción
+            
             header("Location: /ecommerce/views/admin/proveedor_nuevo.php?error=db");
             exit();
         }
     } else {
-        // Faltan campos obligatorios
+        
         header("Location: /ecommerce/views/admin/proveedor_nuevo.php?error=empty");
         exit();
     }
