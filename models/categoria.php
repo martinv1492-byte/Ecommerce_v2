@@ -40,3 +40,4 @@ function obtenerCategoriaPorId($conexion, $idCategoria) {
     $stmt->execute([':id' => $idCategoria]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+?>

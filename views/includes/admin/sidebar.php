@@ -47,8 +47,14 @@ $paginaActual = basename($_SERVER['PHP_SELF']);
                 + Nuevo Proveedor
             </a>
         </li>
-    </ul>
+    
 
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/ecommerce/views/admin/ventas.php">
+                <i class="bi bi-cart-check me-2"></i> 📂 Ventas
+            </a>
+        </li>
+    </ul>
     <hr>
     
     <div class="dropdown">

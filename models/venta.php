@@ -6,6 +6,21 @@ class Venta {
         $this->conexion = $db;
     }
 
+    public function obtenerTodasLasVentas() {
+        try {
+            $sql = "SELECT v.idVenta, v.fecha, v.total, v.estadoPago, v.estadoEnvio, 
+                        u.nombre as cliente_nombre, u.email as cliente_email 
+                    FROM ventas v 
+                    INNER JOIN usuarios u ON v.idUsuario = u.idUsuario 
+                    ORDER BY v.fecha DESC";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+
     public function registrarCompra($idUsuario, $carrito) {
         try {
             
@@ -16,7 +31,7 @@ class Venta {
                 $totalGeneral += $item['precio'] * $item['cantidad'];
             }
 
-
+            
             $sqlVenta = "INSERT INTO ventas (fecha, idUsuario, total, estadoPago, estadoEnvio) 
                         VALUES (NOW(), :idUsuario, :total, :estadoPago, :estadoEnvio)";
             $stmtVenta = $this->conexion->prepare($sqlVenta);
