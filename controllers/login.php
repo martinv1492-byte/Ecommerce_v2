@@ -22,7 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['usuario_rol'] = $usuario['rol']; 
 
         if ($_SESSION['usuario_rol'] === 'admin') {
-            header("Location: ../views/admin/productos.php"); 
+            header("Location: ../index.php"); 
+            exit();
         } else {
             if (!empty($_SESSION['carrito'])) {
                 header("Location: ../views/tienda/checkout.php");

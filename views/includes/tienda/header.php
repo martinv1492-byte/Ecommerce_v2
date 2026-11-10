@@ -25,10 +25,28 @@ if (isset($_SESSION['carrito'])) {
         <div class="d-flex align-items-center gap-3" style="justify-content: flex-end;">
             
             <?php if (isset($_SESSION['usuario_id'])): ?>
-                <span class="text-muted small d-none d-md-inline">Hola, <strong><?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Usuario'); ?></strong></span>
-                <a href="/ecommerce/controllers/logout.php" class="btn btn-outline-danger btn-sm rounded-0 text-uppercase fw-semibold" style="font-size: 0.7rem;">
-                    Salir
-                </a>
+                <div class="dropdown">
+                    <a class="text-dark small text-decoration-none dropdown-toggle fw-semibold" href="#" role="button" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                        Hola, <strong><?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Usuario'); ?></strong>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end rounded-0 shadow-sm" aria-labelledby="dropdownUser" style="font-size: 0.85rem;">
+                        <?php if (isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'admin'): ?>
+                            <li>
+                                <a class="dropdown-item py-2 fw-semibold text-dark" href="/ecommerce/views/admin/productos.php">
+                                    Panel Administrador
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                        <?php endif; ?>
+                        
+                        <li>
+                            <a class="dropdown-item py-2 text-danger fw-semibold" href="/ecommerce/controllers/logout.php">
+                                Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             <?php else: ?>
                 <a href="/ecommerce/views/tienda/iniciosesion.php" class="text-dark text-decoration-none small fw-semibold">Iniciar Sesión</a>
                 <a href="/ecommerce/views/tienda/registro.php" class="text-muted text-decoration-none small d-none d-sm-inline">Registrarse aquí</a>
@@ -49,6 +67,7 @@ if (isset($_SESSION['carrito'])) {
         </div>
     </div>
 </div>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-1">
     <div class="container">
         
@@ -75,7 +94,7 @@ if (isset($_SESSION['carrito'])) {
                     onclick="window.location.href=this.href;">Sin alcohol</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-danger fw-bold" href="/ecommerce/views/tienda/proximamente.php">Ofertas</a>
+                    <a class="nav-link text-danger fw-bold me-2" href="/ecommerce/views/tienda/proximamente.php">Ofertas</a>
                 </li>
             </ul>
 
@@ -83,7 +102,7 @@ if (isset($_SESSION['carrito'])) {
                 <input type="text" name="busqueda" class="form-control rounded-0 border-0 px-3" placeholder="Buscar productos..." value="<?= isset($_GET['busqueda']) ? htmlspecialchars($_GET['busqueda']) : ''; ?>">
         
                 <button type="submit" class="btn btn-danger rounded-0 px-3 d-flex align-items-center justify-content-center" style="background-color: #dc3545;">
-                    <svg xmlns="http://w3.org" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                     </svg>
                 </button>

@@ -55,8 +55,8 @@ $paginaActual = basename($_SERVER['PHP_SELF']);
     <span class="text-white-50 small">Panel de Control</span>
     <?php if (isset($_SESSION['usuario_id']) && ($_SESSION['usuario_rol'] ?? '') === 'admin'): ?>
             <span class="text-white big d-none d-md-inline"><strong><?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Administrador'); ?></strong></span>
-            <a href="/ecommerce/controllers/logout.php" class="btn btn-outline-danger btn-sm rounded-0 text-uppercase fw-semibold" style="font-size: 0.7rem;">
-                Cerrar Sesión
+            <a href="/ecommerce/index.php" class="btn btn-outline-danger btn-sm rounded-0 text-uppercase fw-semibold" style="font-size: 0.7rem;">
+                Volver al sitio
             </a>
     <?php endif; ?>
     </div>
