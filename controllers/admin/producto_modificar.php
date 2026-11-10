@@ -4,10 +4,8 @@ require_once '../../models/producto.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // 1. Obtener el ID del producto que se quiere editar
     $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
 
-    // 2. Recibir los datos del formulario
     $name        = trim($_POST['name'] ?? '');
     $code        = trim($_POST['code'] ?? '');
     $category    = trim($_POST['category'] ?? '');
@@ -19,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stock       = trim($_POST['stock'] ?? '0');
     $brand       = trim($_POST['brand'] ?? '');
 
-    // 3. Validar los campos obligatorios
     if (
         $id <= 0 ||
         $name === '' ||
@@ -31,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // 4. Preparar los datos para el modelo
     $datosProducto = [
         ':nombre'        => $name,
         ':codigo'        => $code,
@@ -45,14 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ':marca'       => $brand
     ];
 
-    // 5. Ejecutar la actualización
     $resultado = editarProducto(
         $conexion,
         $id,
         $datosProducto
     );
 
-    // 6. Redireccionar según el resultado
     if ($resultado) {
         header(
             "Location: ../../views/admin/productos.php?status=updated"
