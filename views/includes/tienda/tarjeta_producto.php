@@ -4,7 +4,6 @@
 
 <div class="card border-light-subtle shadow-sm rounded-0 p-3 bg-white h-100 d-flex flex-column">
 
-
     <div class="text-center bg-light p-3 mb-3" style="height: 200px;">
         <?php 
             $idProd = $producto['idProducto'] ?? $producto['id'] ?? 0;

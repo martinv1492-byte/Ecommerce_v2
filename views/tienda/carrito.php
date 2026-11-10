@@ -32,12 +32,12 @@ include_once '../includes/tienda/header.php';
 
 
     <h2 class="mb-5 fw-bold text-uppercase pb-2 border-bottom" style="font-family: 'Times New Roman', serif; letter-spacing: 1px;">
-        Tu Canasta de Compras
+        Tu Carrito de Compras
     </h2>
 
     <?php if (empty($_SESSION['carrito'])): ?>
         <div class="text-center py-5">
-            <p class="text-muted fs-5 mb-4">Tu canasta de compras está vacía.</p>
+            <p class="text-muted fs-5 mb-4">Tu carrito está vacío.</p>
             <a href="/ecommerce/index.php?categoria=todas" class="btn btn-dark rounded-0 text-uppercase fw-semibold px-4 py-3" style="font-size: 0.8rem; letter-spacing: 1px;">
                 Ver Catálogo de Vinos
             </a>

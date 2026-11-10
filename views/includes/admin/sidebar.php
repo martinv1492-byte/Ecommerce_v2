@@ -66,5 +66,5 @@ $paginaActual = basename($_SERVER['PHP_SELF']);
             </a>
     <?php endif; ?>
     </div>
-    </hr>
+    
 </div>
